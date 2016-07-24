@@ -3,6 +3,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Session;
+use Dflydev\FigCookies\FigResponseCookies;
+use Dflydev\FigCookies\SetCookie;
+use Firebase\JWT\JWT;
 use GuzzleHttp\Client;
 use Interop\Container\ContainerInterface;
 use Slim\Http\Request;
@@ -17,7 +21,12 @@ class LoginController
         $this->ci = $ci;
     }
 
-    public function login(Request $request, Response $response, $args)
+    public function showLogin(Request $request, Response $response, $args)
+    {
+        return $this->ci->get('view')->render($response, 'login.twig');
+    }
+
+    public function openid(Request $request, Response $response, $args)
     {
         $client_id = API_CLIENT;
         $redirect_uri = API_REDIRECT_URI;
@@ -34,6 +43,7 @@ class LoginController
     {
         $code = $request->getQueryParam('code');
 
+        // TODO: handle errors
         $res = (new Client())->request('POST', 'http://openid.willyfog.com/token', [
             'form_params' => [
                 'grant_type'    => 'authorization_code',
@@ -44,17 +54,74 @@ class LoginController
             ]
         ]);
 
-        $response = $res->getBody();
+        $api_response = json_decode($res->getBody());
 
-        $json_decode = json_decode($response);
-        var_dump($json_decode);
+        // Decode the response
+        $access_token = $api_response->access_token;
+        $id_token = $api_response->id_token;
 
-        $access_token = $json_decode->access_token;
+        // Decode the JWT to get the user_id. TODO: abort if not secure
+        $decoded_jwt = $this->decodeJWT($id_token);
+        $user_id = $decoded_jwt->sub;
 
-        $id_token = $json_decode->id_token;
+        $this->setSession($user_id, $access_token);
 
-        echo $id_token;
+        // Set a redirect to the homepage
+        $response = $response->withRedirect('/');
 
-        return "Here is your access token: $access_token";
+        // Save JWT into the cookie
+        $response = $this->setCookie($response, $id_token);
+
+        return $response;
+    }
+
+    public function logout(Request $request, Response $response, $args)
+    {
+        $this->unsetSession();
+        $response = $response->withRedirect('/login');
+
+        return $this->unsetCookie($response);
+    }
+
+    /**
+     * TODO: handle absence of pubkey.pem
+     *
+     * @param $id_token
+     * @return object
+     */
+    private function decodeJWT($id_token)
+    {
+        $key = file_get_contents(APP_PATH . '/data/pubkey.pem');
+
+        return JWT::decode($id_token, $key, ['RS256']);
+    }
+
+    private function setSession($user_id, $access_token)
+    {
+        $session = new Session();
+        $session->set('auth', [
+            'user_id'       => $user_id,
+            'access_token'  => $access_token
+        ]);
+    }
+
+    private function unsetSession()
+    {
+        Session::destroy();
+    }
+
+    private function setCookie($response, $id_token)
+    {
+        $cookie = SetCookie::create('willyfog_session')
+            ->withValue($id_token)
+            ->withPath('/')
+            ->withDomain('.willyfog.com');
+
+        return FigResponseCookies::set($response, $cookie);
+    }
+
+    private function unsetCookie($response)
+    {
+        return FigResponseCookies::remove($response, 'willyfog_session');
     }
 }
