@@ -14,14 +14,6 @@ return [
         'logger' => [
             'name' => 'slim-app',
             'path' => __DIR__ . '/../logs/app.log',
-        ],
-
-        // Database settings
-        'database' => [
-            'host'      => 'localhost',
-            'name'      => 'openid',
-            'user'      => 'root',
-            'password'  => 'root'
         ]
     ],
 ];

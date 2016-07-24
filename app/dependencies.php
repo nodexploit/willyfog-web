@@ -1,9 +1,7 @@
 <?php
-// DIC configuration
 
 $container = $app->getContainer();
 
-// monolog
 $container['logger'] = function ($c) {
     $settings = $c->get('settings')['logger'];
     $logger = new Monolog\Logger($settings['name']);
@@ -13,7 +11,6 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
-// Session
 $container['session'] = function ($c) {
     return new \App\Http\Session();
 };
@@ -22,7 +19,6 @@ $container['flash'] = function ($c) {
     return new \Slim\Flash\Messages();
 };
 
-// view renderer
 $container['view'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
 
