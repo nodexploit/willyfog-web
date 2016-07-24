@@ -110,12 +110,22 @@ class LoginController
         Session::destroy();
     }
 
+    /**
+     * TODO: cipher cookie
+     *
+     * @param $response
+     * @param $id_token
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     private function setCookie($response, $id_token)
     {
+        $expiration = date('D, d-M-Y H:i:s e', strtotime('+23 hours')); // 23 hours expiration so we don't take any risk
+
         $cookie = SetCookie::create('willyfog_session')
             ->withValue($id_token)
             ->withPath('/')
-            ->withDomain('.willyfog.com');
+            ->withDomain('.willyfog.com')
+            ->withExpires($expiration);
 
         return FigResponseCookies::set($response, $cookie);
     }
