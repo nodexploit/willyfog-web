@@ -99,7 +99,7 @@ class LoginController
     private function setSession($user_id, $access_token)
     {
         $session = new Session();
-        $session->set('auth', [
+        $session->set(SESSION_KEY, [
             'user_id'       => $user_id,
             'access_token'  => $access_token
         ]);
@@ -121,7 +121,7 @@ class LoginController
     {
         $expiration = date('D, d-M-Y H:i:s e', strtotime('+23 hours')); // 23 hours expiration so we don't take any risk
 
-        $cookie = SetCookie::create('willyfog_session')
+        $cookie = SetCookie::create(COOKIE_KEY)
             ->withValue($id_token)
             ->withPath('/')
             ->withDomain('.' . APP_DOMAIN)
@@ -132,6 +132,6 @@ class LoginController
 
     private function unsetCookie($response)
     {
-        return FigResponseCookies::remove($response, 'willyfog_session');
+        return FigResponseCookies::remove($response, COOKIE_KEY);
     }
 }

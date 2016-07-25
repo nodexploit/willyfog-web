@@ -21,7 +21,7 @@ class AuthenticateMiddleware
      */
     public function __invoke(RequestInterface $request, ResponseInterface $response, callable $next)
     {
-        $cookie = FigRequestCookies::get($request, 'willyfog_session');
+        $cookie = FigRequestCookies::get($request, COOKIE_KEY);
 
         if ($cookie->getValue() === null) {
             $response = $response->withRedirect('/login');
