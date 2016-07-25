@@ -124,7 +124,7 @@ class LoginController
         $cookie = SetCookie::create('willyfog_session')
             ->withValue($id_token)
             ->withPath('/')
-            ->withDomain('.willyfog.com')
+            ->withDomain('.' . APP_DOMAIN)
             ->withExpires($expiration);
 
         return FigResponseCookies::set($response, $cookie);
