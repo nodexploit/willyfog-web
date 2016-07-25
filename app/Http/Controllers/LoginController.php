@@ -29,13 +29,13 @@ class LoginController
     public function openid(Request $request, Response $response, $args)
     {
         $client_id = API_CLIENT;
-        $redirect_uri = API_REDIRECT_URI;
+        $redirect_uri = OPENID_REDIRECT_URI;
         $response_type = 'code';
         $state = 'xyz';
         $scope = 'openid';
         
         return $response->withRedirect(
-            "http://openid.willyfog.com/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=$response_type&scope=$scope&state=$state"
+            OPENID_URI . "/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=$response_type&scope=$scope&state=$state"
         );
     }
 
@@ -44,13 +44,13 @@ class LoginController
         $code = $request->getQueryParam('code');
 
         // TODO: handle errors
-        $res = (new Client())->request('POST', 'http://openid.willyfog.com/token', [
+        $res = (new Client())->request('POST', OPENID_URI . '/token', [
             'form_params' => [
                 'grant_type'    => 'authorization_code',
                 'client_id'     => API_CLIENT,
                 'client_secret' => API_SECRET,
                 'code'          => $code,
-                'redirect_uri'  => 'http://willyfog.com/login/callback'
+                'redirect_uri'  => OPENID_REDIRECT_URI
             ]
         ]);
 
