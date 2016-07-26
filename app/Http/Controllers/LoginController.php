@@ -34,7 +34,8 @@ class LoginController
         $state = 'xyz';
         $scope = 'openid';
         
-        return $response->withRedirect(
+        return $response->withStatus(302)->withHeader(
+            'Location',
             OPENID_URI . "/authorize?client_id=$client_id&redirect_uri=$redirect_uri&response_type=$response_type&scope=$scope&state=$state"
         );
     }
@@ -67,7 +68,7 @@ class LoginController
         $this->setSession($user_id, $access_token);
 
         // Set a redirect to the homepage
-        $response = $response->withRedirect('/');
+        $response = $response->withStatus(302)->withHeader('Location', '/');
 
         // Save JWT into the cookie
         $response = $this->setCookie($response, $id_token);
@@ -78,7 +79,7 @@ class LoginController
     public function logout(Request $request, Response $response, $args)
     {
         $this->unsetSession();
-        $response = $response->withRedirect('/login');
+        $response = $response->withStatus(302)->withHeader('Location', '/login');
 
         return $this->unsetCookie($response);
     }
@@ -124,7 +125,6 @@ class LoginController
         $cookie = SetCookie::create(COOKIE_KEY)
             ->withValue($id_token)
             ->withPath('/')
-            ->withDomain('.' . APP_DOMAIN)
             ->withExpires($expiration);
 
         return FigResponseCookies::set($response, $cookie);
@@ -132,6 +132,6 @@ class LoginController
 
     private function unsetCookie($response)
     {
-        return FigResponseCookies::remove($response, COOKIE_KEY);
+        return FigResponseCookies::expire($response, COOKIE_KEY);
     }
 }
