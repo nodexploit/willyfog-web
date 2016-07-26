@@ -19,6 +19,13 @@ $container['flash'] = function ($c) {
     return new \Slim\Flash\Messages();
 };
 
+$container['auth'] = function ($c) {
+    $auth = \App\Http\Auth::getInstance();
+    $auth->setCI($c);
+
+    return $auth;
+};
+
 $container['view'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
 
@@ -29,6 +36,7 @@ $container['view'] = function ($c) {
     ));
     $view->offsetSet('flash', $c->get('flash'));
     $view->offsetSet('session', $c->get('session'));
+    $view->offsetSet('auth', $c->get('auth'));
 
     return $view;
 };

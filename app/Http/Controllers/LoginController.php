@@ -98,7 +98,7 @@ class LoginController
 
     private function setSession($user_id, $access_token)
     {
-        $session = new Session();
+        $session = $this->ci->get('session');
         $session->set(SESSION_KEY, [
             'user_id'       => $user_id,
             'access_token'  => $access_token

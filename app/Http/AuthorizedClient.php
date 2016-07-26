@@ -5,7 +5,7 @@ namespace App\Http;
 
 use GuzzleHttp\Exception\RequestException;
 
-class Client extends \GuzzleHttp\Client
+class AuthorizedClient extends \GuzzleHttp\Client
 {
     public function __construct(array $config = [])
     {
