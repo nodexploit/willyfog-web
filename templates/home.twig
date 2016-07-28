@@ -1,5 +1,49 @@
-<h1>Hello! Authenticated user</h1>
 
-{{ auth.user.email }}
+{% extends "layouts/master.twig" %}
 
-<a href="/logout">Logout</a>
+{% block title %}Hello{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h1>Hello! Authenticated user</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+        <table id="equivalences" class="display">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Equivalence</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for equivalence in equivalences %}
+                <tr>
+                    <td>{{ equivalence.id }}</td>
+                    <td>{{ equivalence.subject_name }}</td>
+                    <td>{{ equivalence.equivalent_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <a href="/logout">Logout</a>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#equivalences').DataTable();
+        });
+    </script>
+{% endblock %}

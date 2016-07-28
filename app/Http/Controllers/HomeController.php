@@ -20,6 +20,12 @@ class HomeController
 
     public function hello(Request $request, Response $response, $args)
     {
-        return $this->ci->get('view')->render($response, 'home.twig');
+        $res = (new AuthorizedClient)->request('GET', '/api/v1/equivalences');
+
+        $equivalences = json_decode($res->getBody());
+
+        return $this->ci->get('view')->render($response, 'home.twig', [
+            'equivalences' => $equivalences
+        ]);
     }
 }

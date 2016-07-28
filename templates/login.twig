@@ -1,3 +1,8 @@
-<h1>Hello!</h1>
+{% extends "layouts/master.twig" %}
 
-<a href="/openid"><button>Log In</button></a>
+{% block title %}Welcome{% endblock %}
+{% block content %}
+    <h1>Hello!</h1>
+
+    <a href="/openid"><button>Log In</button></a>
+{% endblock %}
