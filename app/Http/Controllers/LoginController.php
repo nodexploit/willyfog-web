@@ -23,7 +23,7 @@ class LoginController
 
     public function showLogin(Request $request, Response $response, $args)
     {
-        return $this->ci->get('view')->render($response, 'login.twig');
+        return $this->ci->get('view')->render($response, 'welcome.twig');
     }
 
     public function openid(Request $request, Response $response, $args)

@@ -16,16 +16,17 @@
 <body>
 
 <div class="container-fluid">
+    <header>
+        {% include 'layouts/header.twig' %}
+    </header>
+
     {% block content %}{% endblock %}
 
     {% block javascripts %}
     {% endblock %}
 
     <footer>
-        <hr>
-        {% block footer %}
-            &copy; Copyright 2016 by <a href="http://popokis.com">Popokis</a>.
-        {% endblock %}
+        {% include 'layouts/footer.twig' %}
     </footer>
 </div>
 

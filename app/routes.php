@@ -13,5 +13,7 @@ $app->group('', function () use ($namespace) {
 
 $app->group('', function () use ($namespace) {
     $this->get('/logout', "$namespace\\LoginController:logout");
-    $this->get('/', "$namespace\\RequestController:requests");
+
+    $this->get('/', "$namespace\\RequestController:index");
+    $this->get('/request/{id}', "$namespace\\RequestController:show");
 })->add($authenticate);

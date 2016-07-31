@@ -20,7 +20,7 @@ class RequestController
         $this->ci = $ci;
     }
 
-    public function requests(Request $request, Response $response, $args)
+    public function index(Request $request, Response $response, $args)
     {
         $user_id = Auth::getInstance($this->ci)->userId();
 
@@ -32,8 +32,25 @@ class RequestController
             $requests = [];
         }
 
-        return $this->ci->get('view')->render($response, 'requests/home.twig', [
+        return $this->ci->get('view')->render($response, 'requests/index.twig', [
             'requests' => $requests,
+        ]);
+    }
+
+    public function show(Request $request, Response $response, $args)
+    {
+        $request_id = $args['id'];
+
+        try {
+            $res = (new AuthorizedClient)->request('GET', "/api/v1/requests/$request_id");
+
+            $requests = json_decode($res->getBody());
+        } catch (\Exception $e) {
+            $requests = [];
+        }
+
+        return $this->ci->get('view')->render($response, 'requests/show.twig', [
+            'request' => $request,
         ]);
     }
 }
