@@ -20,8 +20,7 @@ $container['flash'] = function ($c) {
 };
 
 $container['auth'] = function ($c) {
-    $auth = \App\Http\Auth::getInstance();
-    $auth->setCI($c);
+    $auth = \App\Http\Auth::getInstance($c);
 
     return $auth;
 };

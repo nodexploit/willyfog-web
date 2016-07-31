@@ -11,12 +11,15 @@ class Auth
     private static $instance;
     private $ci;
 
-    private function __construct() {}
+    private function __construct(ContainerInterface $ci)
+    {
+        $this->ci = $ci;
+    }
 
-    public static function getInstance()
+    public static function getInstance(ContainerInterface $ci)
     {
         if (!self::$instance instanceof self) {
-            self::$instance = new self;
+            self::$instance = new self($ci);
         }
 
         return self::$instance;
@@ -71,6 +74,11 @@ class Auth
         }
 
         return $cached_user_info;
+    }
+
+    public function userId()
+    {
+        return $this->getAuthSession()['user_id'];
     }
     
     private function cacheUserInfo($user_info)

@@ -13,5 +13,5 @@ $app->group('', function () use ($namespace) {
 
 $app->group('', function () use ($namespace) {
     $this->get('/logout', "$namespace\\LoginController:logout");
-    $this->get('/', "$namespace\\HomeController:hello");
+    $this->get('/', "$namespace\\RequestController:requests");
 })->add($authenticate);

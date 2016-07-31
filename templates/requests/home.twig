@@ -8,26 +8,29 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <h1>Hello! Authenticated user</h1>
-    </div>
+
+    <h1>Hello {{ auth.user.name }} !</h1>
+
+    <h3>Here are your open requests:</h3>
+
+    <br>
 
     <div class="row">
         <div class="col-md-6">
-        <table id="equivalences" class="display">
+        <table id="requests" class="display">
             <thead>
             <tr>
                 <th>#</th>
-                <th>Subject</th>
-                <th>Equivalence</th>
+                <th>Code</th>
+                <th>Name</th>
             </tr>
             </thead>
             <tbody>
-            {% for equivalence in equivalences %}
+            {% for request in requests %}
                 <tr>
-                    <td>{{ equivalence.id }}</td>
-                    <td>{{ equivalence.subject_name }}</td>
-                    <td>{{ equivalence.equivalent_name }}</td>
+                    <td>{{ request.id }}</td>
+                    <td>{{ request.subject_code }}</td>
+                    <td>{{ request.subject_name }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -43,7 +46,7 @@
 
     <script>
         $(function () {
-            $('#equivalences').DataTable();
+            $('#requests').DataTable();
         });
     </script>
 {% endblock %}
