@@ -44,13 +44,13 @@ class RequestController
         try {
             $res = (new AuthorizedClient)->request('GET', "/api/v1/requests/$request_id");
 
-            $requests = json_decode($res->getBody());
+            $eq_request = json_decode($res->getBody());
         } catch (\Exception $e) {
-            $requests = [];
+            $eq_request = [];
         }
 
         return $this->ci->get('view')->render($response, 'requests/show.twig', [
-            'request' => $request,
+            'request' => $eq_request
         ]);
     }
 }

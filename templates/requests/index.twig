@@ -27,15 +27,23 @@
             <tbody>
             {% for request in requests %}
                 <tr>
-                    <td>{{ request.id }}</td>
-                    <td>{{ request.subject_code }}</td>
-                    <td>{{ request.subject_name }}</td>
+                    <td class="col-md-1">{{ request.id }}</td>
+                    <td class="col-md-2">{{ request.subject_code }}</td>
+                    <td>
+                        <a href="/requests/{{ request.id }}">
+                            {{ request.subject_name }}
+                        </a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         </div>
     </div>
+
+    <br>
+
+    <button class="btn btn-success">Create new request</button>
 {% endblock %}
 
 {% block javascripts %}

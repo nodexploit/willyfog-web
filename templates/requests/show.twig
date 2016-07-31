@@ -4,6 +4,29 @@
 
 {% block content %}
 
-    <h1>{{ request.id }}</h1>
+    <h1>Origin</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p>Subject: <b>{{ request.subject_name }}</b></p>
+            <p>Code: <b>{{ request.subject_code }}</b></p>
+            <p>Degree: <b>{{ request.degree_name }}</b></p>
+            <p>Centre: <b>{{ request.centre_name }}</b></p>
+            <p>University: <b>{{ request.university_name }}</b></p>
+            <p>Mobility type: <b>{{ request.mobility_type }}</b></p>
+        </div>
+    </div>
+
+    <h1>Destination</h1>
+
+    {% for destination in request.destination_subjects %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>Subject: <b>{{ destination.subject_name }}</b></p>
+                <p>Code: <b>{{ destination.subject_code }}</b></p>
+                <p>Centre: <b>{{ destination.centre_name }}</b></p>
+            </div>
+        </div>
+    {% endfor %}
 
 {% endblock %}
