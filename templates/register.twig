@@ -36,14 +36,38 @@
                 <input type="text" class="form-control" id="nif" placeholder="Your NIF">
             </div>
             <div class="form-group">
-                <label for="university_id">University</label>
-                <select class="form-control" id="university_id">
-                    <option selected>Your University</option>
+                <label for="university">University</label>
+                <select class="form-control" id="university">
+                    <option selected>Your university</option>
                     {% for university in universities %}
                         <option value="{{ university.id }}">{{ university.name }}</option>
                     {% endfor %}
                 </select>
             </div>
+            <div class="form-group">
+                <label for="centre">Centre</label>
+                <select class="form-control" id="centre">
+                    <option selected>Your centre (please select an university first)</option>
+                </select>
+            </div>
         </div>
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function () {
+            $('#university').change(function () {
+                var universityId = $(this).val();
+
+                $.ajax({
+                    method: 'GET',
+                    url: 'http://localhost:9000/api/v1/universities/' + universityId + '/centres',
+                    dataType: 'JSON'
+                }).done(function (data) {
+                    console.log(data);
+                });
+            });
+        });
+    </script>
 {% endblock %}
