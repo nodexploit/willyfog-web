@@ -21,7 +21,7 @@ class LoginController
         $this->ci = $ci;
     }
 
-    public function showLogin(Request $request, Response $response, $args)
+    public function showWelcome(Request $request, Response $response, $args)
     {
         return $this->ci->get('view')->render($response, 'welcome.twig');
     }
@@ -82,6 +82,13 @@ class LoginController
         $response = $response->withStatus(302)->withHeader('Location', '/login');
 
         return $this->unsetCookie($response);
+    }
+
+    public function showRegister(Request $request, Response $response, $args)
+    {
+        return $this->ci->get('view')->render($response, 'register.twig', [
+            'universities' => \App\Models\University::all()
+        ]);
     }
 
     /**

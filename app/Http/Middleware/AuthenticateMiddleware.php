@@ -24,7 +24,7 @@ class AuthenticateMiddleware
         $cookie = FigRequestCookies::get($request, COOKIE_KEY);
 
         if ($cookie->getValue() === null) {
-            $response = $response->withRedirect('/login');
+            $response = $response->withRedirect('/guest');
         } else {
             $response = $next($request, $response);
         }

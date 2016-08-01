@@ -14,21 +14,23 @@
     {% endblock %}
 </head>
 <body>
+    <div class="container-fluid">
+        <header>
+            {% include 'layouts/header.twig' %}
+        </header>
 
-<div class="container-fluid">
-    <header>
-        {% include 'layouts/header.twig' %}
-    </header>
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
 
-    {% block javascripts %}
-    {% endblock %}
+        {% block javascripts %}
+        {% endblock %}
 
-    <footer>
-        {% include 'layouts/footer.twig' %}
-    </footer>
-</div>
 
+    </div>
+    <div class="container-fluid">
+        <footer>
+            {% include 'layouts/footer.twig' %}
+        </footer>
+    </div>
 </body>
 </html>

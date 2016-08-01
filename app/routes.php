@@ -6,7 +6,8 @@ $guest = new \App\Http\Middleware\GuestMiddleware();
 $authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
 
 $app->group('', function () use ($namespace) {
-    $this->get('/login', "$namespace\\LoginController:showLogin");
+    $this->get('/guest', "$namespace\\LoginController:showWelcome");
+    $this->get('/register', "$namespace\\LoginController:showRegister");
     $this->get('/openid', "$namespace\\LoginController:openid");
     $this->get('/login/callback', "$namespace\\LoginController:loginCallback");
 })->add($guest);

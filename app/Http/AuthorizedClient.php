@@ -5,6 +5,12 @@ namespace App\Http;
 
 use GuzzleHttp\Exception\RequestException;
 
+/**
+ * HTTP client that is openid authorized
+ *
+ * Class AuthorizedClient
+ * @package App\Http
+ */
 class AuthorizedClient extends \GuzzleHttp\Client
 {
     public function __construct(array $config = [])

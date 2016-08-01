@@ -10,5 +10,6 @@ defined('API_CLIENT') || define('API_CLIENT', 'webclient');
 defined('API_SECRET') || define('API_SECRET', 'websecret');
 
 defined('SESSION_KEY') || define('SESSION_KEY', 'willyfog_auth');
+defined('WEB_SESSION_KEY') || define('WEB_SESSION_KEY', 'web_auth');
 defined('COOKIE_KEY') || define('COOKIE_KEY', 'willyfog_session');
 defined('UI_SESSION_KEY') || define('UI_SESSION_KEY', 'willyfog_user_info');
