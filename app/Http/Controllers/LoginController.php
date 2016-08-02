@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Session;
+use App\Http\WebClient;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
 use Firebase\JWT\JWT;
@@ -89,6 +90,38 @@ class LoginController
         return $this->ci->get('view')->render($response, 'register.twig', [
             'universities' => \App\Models\University::all()
         ]);
+    }
+
+    /**
+     * TODO: handle registration failure
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return static
+     */
+    public function register(Request $request, Response $response, $args)
+    {
+        $params = $request->getParsedBody();
+
+        $res = (new WebClient())->request('POST', '/api/v1/users/register', [
+            'form_params' => [
+                'name'      => $params['name'],
+                'surname'   => $params['surname'],
+                'nif'       => $params['nif'],
+                'email'     => $params['email'],
+                'digest'    => $params['password'],
+                'degree_id' => $params['degree_id'],
+            ]
+        ]);
+
+        $api_response = json_decode($res->getBody());
+
+        if ($api_response->status == "Success") {
+            return $response->withStatus(302)->withHeader('Location', '/');
+        } else {
+            return $response->withStatus(302)->withHeader('Location', '/register');
+        }
     }
 
     /**
