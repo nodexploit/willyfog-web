@@ -37,7 +37,7 @@ class WebClient extends \GuzzleHttp\Client
         $access_token = $session->get(WEB_SESSION_KEY);
 
         if ($access_token == null) {
-            $access_token = $this->issueWebAccessToken();
+            $access_token = $this->issueWebAccessToken($session);
         }
         
         $options = array_merge($options, [
@@ -63,7 +63,7 @@ class WebClient extends \GuzzleHttp\Client
     /**
      * TODO: handle errors
      */
-    private function issueWebAccessToken()
+    private function issueWebAccessToken($session)
     {
         $res = (new Client())->request('POST', OPENID_URI . '/token', [
             'form_params' => [
@@ -74,7 +74,9 @@ class WebClient extends \GuzzleHttp\Client
         ]);
 
         $api_response = json_decode($res->getBody());
+        $access_token = $api_response->access_token;
+        $session->set(WEB_SESSION_KEY, $access_token);
 
-        return $api_response->access_token;
+        return $access_token;
     }
 }

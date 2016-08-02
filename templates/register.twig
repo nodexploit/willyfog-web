@@ -62,7 +62,7 @@
 
                 $.ajax({
                     method: 'GET',
-                    url: 'http://localhost:9000/api/v1/universities/' + universityId + '/centres',
+                    url: '/universities/' + universityId + '/centres',
                     dataType: 'JSON'
                 }).done(function (data) {
                     console.log(data);

@@ -6,6 +6,10 @@ $guest = new \App\Http\Middleware\GuestMiddleware();
 $authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
 
 $app->group('', function () use ($namespace) {
+    $this->get('/universities/{id}/centres', "$namespace\\UniversitiesController:centres");
+});
+
+$app->group('', function () use ($namespace) {
     $this->get('/guest', "$namespace\\LoginController:showWelcome");
     $this->get('/register', "$namespace\\LoginController:showRegister");
     $this->get('/openid', "$namespace\\LoginController:openid");
