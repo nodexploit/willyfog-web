@@ -6,7 +6,7 @@ $guest = new \App\Http\Middleware\GuestMiddleware();
 $authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
 
 $app->group('', function () use ($namespace) {
-    $this->get('/universities/{id}/centres', "$namespace\\UniversitiesController:centres");
+    $this->get('/universities/{id}/centres', "$namespace\\UniversityController:centres");
 });
 
 $app->group('', function () use ($namespace) {

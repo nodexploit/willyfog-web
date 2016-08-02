@@ -65,7 +65,14 @@
                     url: '/universities/' + universityId + '/centres',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    console.log(data);
+                    var $centresSelector = $('#centre');
+                    $centresSelector.html('');
+
+                    $.each(data, function (idx, val) {
+                        $centresSelector.append(
+                                $('<option value="' + val.id + '">' + val.name + '</option>')
+                        );
+                    });
                 });
             });
         });
