@@ -66,7 +66,7 @@ class Auth
             $auth = $this->getAuthSession();
             $user_id = $auth['user_id'];
 
-            $res = (new AuthorizedClient())->request('GET', "/api/v1/users/$user_id");
+            $res = (new AuthorizedClient())->request('GET', "/api/v1/users/$user_id/info");
 
             $user_info = json_decode($res->getBody());
 

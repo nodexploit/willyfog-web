@@ -1,0 +1,55 @@
+{% extends "layouts/master.twig" %}
+
+{% block title %}New request{% endblock %}
+
+{% block content %}
+    <h2>Create request</h2>
+
+    <h4>{{ degree_name }}</h4>
+
+    <form method="POST" action="">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Origin</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group col-md-2">
+                    <label for="origin_subject_code">Subject code</label>
+                    <input type="text" class="form-control" id="origin_subject_code" name="origin_subject_code" value="" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="origin_subject_id">Subject name</label>
+                    <select class="form-control" id="origin_subject_id" name="origin_subject_id">
+                        <option selected>Select your subject</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function () {
+
+            var subjectCodes = {{ subject_codes | raw }};
+
+            $('#origin_subject_id').change(function () {
+                var selectedIdx = $(this).prop('selectedIndex') - 1;
+
+                var originSubjectCode = "";
+                if (selectedIdx > -1) {
+                    originSubjectCode = subjectCodes[selectedIdx];
+                }
+
+                $('#origin_subject_code').val(originSubjectCode);
+            });
+        });
+    </script>
+{% endblock %}
