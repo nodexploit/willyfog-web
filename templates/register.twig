@@ -5,6 +5,13 @@
     <h1>Welcome student!</h1>
     <h3>Please fill in with the following data:</h3>
 
+    {% if flash.getMessage('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flash.getMessage('error')[0] }}:
+            {{ flash.getMessage('messages')[0] }}
+        </div>
+    {% endif %}
+
     <form method="POST" action="/register">
         <div class="col-md-6">
             <div class="form-group">
@@ -63,6 +70,14 @@
 {% block javascripts %}
     <script>
         $(function () {
+            $('form').submit(function () {
+                if ($('#university').find(':selected').val() == "Your university") {
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
             $('#university').change(function () {
                 var universityId = $(this).val();
 

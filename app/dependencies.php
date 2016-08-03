@@ -28,11 +28,12 @@ $container['auth'] = function ($c) {
 $container['view'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
 
-    $view = new \Slim\Views\Twig($settings['template_path']);
+    $view = new \Slim\Views\Twig($settings['template_path']/*, ['debug' => true]*/);
     $view->addExtension(new \Slim\Views\TwigExtension(
         $c['router'],
         $c['request']->getUri()
     ));
+    $view->addExtension(new Twig_Extension_Debug());
     $view->offsetSet('flash', $c->get('flash'));
     $view->offsetSet('session', $c->get('session'));
     $view->offsetSet('auth', $c->get('auth'));

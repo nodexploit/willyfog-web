@@ -120,6 +120,9 @@ class LoginController
         if ($api_response->status == "Success") {
             return $response->withStatus(302)->withHeader('Location', '/');
         } else {
+            $this->ci->get('flash')->addMessage('error', $api_response->status);
+            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+
             return $response->withStatus(302)->withHeader('Location', '/register');
         }
     }
