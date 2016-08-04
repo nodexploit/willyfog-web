@@ -57,12 +57,32 @@ class RequestController
 
     public function create(Request $request, Response $response, $args)
     {
+        $request_id = $args['id'];
+        $comment = $request->getParsedBodyParam('comment');
+
+        $res = (new AuthorizedClient())->request('POST', "/api/v1/request/$request_id/comments", [
+            'form_paramas' => [
+                'comment'   => $comment
+            ]
+        ]);
+
+        $api_response = json_decode($res);
+
+        if ($api_response->status == 'Success') {
+            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
+        } else {
+            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
+        }
+    }
+
+    public function comment(Request $request, Response $response, $args)
+    {
         $user = Auth::getInstance($this->ci)->user();
         $degree_name = $user->degree_name;
         $degree_id = $user->degree_id;
 
         $subjects = Degree::subjects($degree_id);
-        
+
         return $this->ci->get('view')->render($response, 'requests/create.twig', [
             'degree_name'   => $degree_name,
             'subjects'      => $subjects,

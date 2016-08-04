@@ -29,4 +29,12 @@
         </div>
     {% endfor %}
 
+    <h4>Comments</h4>
+
+    <form method="POST" action="{{ request.id }}/comment">
+        <textarea class="form-control" rows="4" id="commentary" name="commentary">Your comment ...</textarea>
+        <br>
+        <input type="submit" value="Send">
+    </form>
+
 {% endblock %}
