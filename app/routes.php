@@ -26,4 +26,6 @@ $app->group('', function () use ($namespace) {
     $this->get('/requests/new', "$namespace\\RequestController:create");
     $this->get('/requests/{id}', "$namespace\\RequestController:show");
     $this->post('/requests/{id}/comment', "$namespace\\RequestController:comment");
+
+    $this->get('/search', "$namespace\\SearchController:results");
 })->add($authenticate);

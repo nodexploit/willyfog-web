@@ -1,0 +1,42 @@
+{% extends "layouts/master.twig" %}
+
+{% block title %}Results{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+        <table id="results" class="display">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Equivalent Subject</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for result in results %}
+                <tr>
+                    <td class="col-md-1">{{ result.id }}</td>
+                    <td class="col-md-2">{{ result.subject_name }}</td>
+                    <td class="col-md-2">{{ result.equivalent_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#results').DataTable();
+        });
+    </script>
+{% endblock %}

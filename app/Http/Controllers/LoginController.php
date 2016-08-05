@@ -80,7 +80,7 @@ class LoginController
     public function logout(Request $request, Response $response, $args)
     {
         $this->unsetSession();
-        $response = $response->withStatus(302)->withHeader('Location', '/login');
+        $response = $response->withStatus(302)->withHeader('Location', '/guest');
 
         return $this->unsetCookie($response);
     }
