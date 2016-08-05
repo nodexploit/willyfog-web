@@ -31,10 +31,40 @@
 
     <h4>Comments</h4>
 
+    {% if flash.getMessage('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flash.getMessage('error')[0] }}:
+            {{ flash.getMessage('messages')[0] }}
+        </div>
+    {% endif %}
+
     <form method="POST" action="{{ request.id }}/comment">
-        <textarea class="form-control" rows="4" id="commentary" name="commentary">Your comment ...</textarea>
+        <textarea class="form-control" rows="4" id="comment" name="comment" placeholder="Your comment ..."></textarea>
         <br>
         <input type="submit" value="Send">
     </form>
 
+    <br>
+
+    {% for comment in comments %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p><b>{{ comment.user_name }} {{ comment.user_surname }}</b> said:</p>
+                <blockquote>{{ comment.content }}</blockquote>
+                <p>on {{ comment.created_at }}</p>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(function () {
+            $('form').submit(function (e) {
+                return $('#comment').val().length > 0 &&
+                        confirm("Are you sure ?");
+            });
+        });
+    </script>
 {% endblock %}

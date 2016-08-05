@@ -46,47 +46,46 @@ class RequestController
             $res = (new AuthorizedClient)->request('GET', "/api/v1/requests/$request_id");
 
             $eq_request = json_decode($res->getBody());
+
+            $res = (new AuthorizedClient)->request('GET', "/api/v1/requests/$request_id/comments");
+
+            $comments = json_decode($res->getBody());
         } catch (\Exception $e) {
             $eq_request = [];
+            $comments = [];
         }
 
         return $this->ci->get('view')->render($response, 'requests/show.twig', [
-            'request' => $eq_request
+            'request'   => $eq_request,
+            'comments'  => $comments
         ]);
     }
 
     public function create(Request $request, Response $response, $args)
     {
-        $request_id = $args['id'];
-        $comment = $request->getParsedBodyParam('comment');
 
-        $res = (new AuthorizedClient())->request('POST', "/api/v1/request/$request_id/comments", [
-            'form_paramas' => [
-                'comment'   => $comment
-            ]
-        ]);
-
-        $api_response = json_decode($res);
-
-        if ($api_response->status == 'Success') {
-            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
-        } else {
-            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
-        }
     }
 
     public function comment(Request $request, Response $response, $args)
     {
-        $user = Auth::getInstance($this->ci)->user();
-        $degree_name = $user->degree_name;
-        $degree_id = $user->degree_id;
+        $request_id = $args['id'];
+        $comment = $request->getParsedBodyParam('comment');
 
-        $subjects = Degree::subjects($degree_id);
-
-        return $this->ci->get('view')->render($response, 'requests/create.twig', [
-            'degree_name'   => $degree_name,
-            'subjects'      => $subjects,
-            'subject_codes' => json_encode(array_column($subjects, 'code'))
+        $res = (new AuthorizedClient())->request('POST', "/api/v1/requests/$request_id/comment", [
+            'form_params' => [
+                'content'   => $comment
+            ]
         ]);
+
+        $api_response = json_decode($res->getBody());
+
+        if ($api_response->status == 'Success') {
+            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
+        } else {
+            $this->ci->get('flash')->addMessage('error', $api_response->status);
+            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+
+            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
+        }
     }
 }
