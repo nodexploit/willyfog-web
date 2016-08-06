@@ -6,11 +6,11 @@ $guest = new \App\Http\Middleware\GuestMiddleware();
 $authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
 
 $app->group('', function () use ($namespace) {
-    $this->get('/universities/{id}/centres', "$namespace\\UniversityController:centres");
-
-    $this->get('/centres/{id}/degrees', "$namespace\\CentreController:degrees");
-
     $this->get('/countries/{id}/cities', "$namespace\\CountryController:cities");
+    $this->get('/cities/{id}/universities', "$namespace\\CityController:universities");
+    $this->get('/universities/{id}/centres', "$namespace\\UniversityController:centres");
+    $this->get('/centres/{id}/degrees', "$namespace\\CentreController:degrees");
+    $this->get('/degrees/{id}/subjects', "$namespace\\DegreeController:subjects");
 });
 
 $app->group('', function () use ($namespace) {

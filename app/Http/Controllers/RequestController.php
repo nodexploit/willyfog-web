@@ -72,10 +72,11 @@ class RequestController
         $countries = Country::all();
         
         return $this->ci->get('view')->render($response, 'requests/create.twig', [
-            'degree_name'   => $degree_name,
-            'subjects'      => $subjects,
-            'subject_codes' => json_encode(array_column($subjects, 'code')),
-            'countries'     => $countries
+            'degree_name'       => $degree_name,
+            'subjects'          => $subjects,
+            'subject_codes'     => json_encode(array_column($subjects, 'code')),
+            'subject_credits'   => json_encode(array_column($subjects, 'credits')),
+            'countries'         => $countries
         ]);
     }
 
