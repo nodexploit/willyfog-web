@@ -7,7 +7,10 @@ $authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
 
 $app->group('', function () use ($namespace) {
     $this->get('/universities/{id}/centres', "$namespace\\UniversityController:centres");
+
     $this->get('/centres/{id}/degrees', "$namespace\\CentreController:degrees");
+
+    $this->get('/countries/{id}/cities', "$namespace\\CountryController:cities");
 });
 
 $app->group('', function () use ($namespace) {

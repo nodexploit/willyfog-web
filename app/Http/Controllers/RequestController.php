@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Auth;
 use App\Http\AuthorizedClient;
+use App\Models\Country;
 use App\Models\Degree;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
@@ -63,7 +64,19 @@ class RequestController
 
     public function create(Request $request, Response $response, $args)
     {
+        $user = Auth::getInstance($this->ci)->user();
+        $degree_name = $user->degree_name;
+        $degree_id = $user->degree_id;
 
+        $subjects = Degree::subjects($degree_id);
+        $countries = Country::all();
+        
+        return $this->ci->get('view')->render($response, 'requests/create.twig', [
+            'degree_name'   => $degree_name,
+            'subjects'      => $subjects,
+            'subject_codes' => json_encode(array_column($subjects, 'code')),
+            'countries'     => $countries
+        ]);
     }
 
     public function comment(Request $request, Response $response, $args)

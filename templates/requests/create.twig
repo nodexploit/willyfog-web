@@ -13,8 +13,8 @@
                 <h3 class="panel-title">Origin</h3>
             </div>
             <div class="panel-body">
-                <div class="form-group col-md-2">
-                    <label for="origin_subject_code">Subject code</label>
+                <div class="form-group col-md-1">
+                    <label for="origin_subject_code">Code</label>
                     <input type="text" class="form-control" id="origin_subject_code" name="origin_subject_code" value="" disabled>
                 </div>
                 <div class="form-group col-md-6">
@@ -25,6 +25,10 @@
                             <option value="{{ subject.id }}">{{ subject.name }}</option>
                         {% endfor %}
                     </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="origin_subject_credits">Credits</label>
+                    <input type="text" class="form-control" id="origin_subject_credits" name="origin_subject_credits" value="" disabled>
                 </div>
                 <div class="form-group col-md-4">
                     Mobility type:
@@ -55,6 +59,89 @@
                 <h3 class="panel-title">Destination</h3>
             </div>
             <div class="panel-body">
+                <div class="pull-right">
+                    <button class="btn btn-info" id="custom_subject">Custom</button>
+                </div>
+                <!-- selectable subject !-->
+                <div id="selectable_subject">
+                    <div class="form-group col-md-3">
+                        <label for="destination_country_id">Country</label>
+                        <select class="form-control" id="destination_country_id" name="destination_country_id">
+                            <option selected>Select your country</option>
+                            {% for country in countries %}
+                                <option value="{{ country.id }}">{{ country.name }}</option>
+                            {% endfor %}
+                        </select></div>
+                    <div class="form-group col-md-3">
+                        <label for="destination_city_id">City</label>
+                        <select class="form-control" id="destination_city_id" name="destination_city_id">
+                            <option selected>Select your city</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="destination_centre_id">Centre</label>
+                        <select class="form-control" id="destination_centre_id" name="destination_centre_id">
+                            <option selected>Select your centre</option>
+                        </select>
+                   </div>
+                    <div class="form-group col-md-5">
+                        <label for="destination_university_id">University</label>
+                        <select class="form-control" id="destination_university_id" name="destination_university_id">
+                            <option selected>Select your university</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="destination_subject_code">Subject code</label>
+                        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="destination_subject_id">Subject name</label>
+                        <select class="form-control" id="destination_subject_id" name="destination_subject_id">
+                            <option selected>Select your centre</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="destination_credits">Credits</label>
+                        <input type="text" class="form-control" id="destination_credits" name="destination_credits" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="destination_url">Url</label>
+                        <input type="text" class="form-control" id="destination_url" name="destination_url" value="" disabled>
+                    </div>
+                </div>
+                <!-- end selectable subject !-->
+                <!-- custom subject !-->
+                <div id="custom_subject" style="display: none;">
+                    <div class="form-group col-md-3">
+                        <label for="destination_country">Country</label>
+                        <input type="text" class="form-control" id="destination_country" name="destination_country" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="destination_city">City</label>
+                        <input type="text" class="form-control" id="destination_city" name="destination_city" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="destination_centre">Centre</label>
+                        <input type="text" class="form-control" id="destination_centre" name="destination_centre" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="destination_subject_code">Subject code</label>
+                        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="destination_subject_id">Subject name</label>
+                        <input type="text" class="form-control" id="destination_subject_name" name="destination_subject_name" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="destination_credits">Credits</label>
+                        <input type="text" class="form-control" id="destination_credits" name="destination_credits" value="" disabled>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="destination_url">Url</label>
+                        <input type="text" class="form-control" id="destination_url" name="destination_url" value="" disabled>
+                    </div>
+                </div>
+                <!-- end custom subject !-->
             </div>
         </div>
     </form>
@@ -76,6 +163,37 @@
 
                 $('#origin_subject_code').val(originSubjectCode);
             });
+
+            $('#custom_subject').click(function (e) {
+                e.preventDefault();
+
+                $('#selectable_subject').toggle();
+                $('#custom_subject').toggle();
+            });
+
+            $('#destination_country_id').change(function () {
+                var countryId = $(this).val();
+
+                $.ajax({
+                    method: 'GET',
+                    url: '/countries/' + countryId + '/cities',
+                    dataType: 'JSON'
+                }).done(function (data) {
+                    var $city = $('#destination_city_id');
+                    updateSelectOptions($city, data);
+//                    $centre.trigger('change');
+                });
+            });
+
+            function updateSelectOptions($selector, data) {
+                $selector.html('');
+
+                $.each(data, function (idx, val) {
+                    $selector.append(
+                            $('<option value="' + val.id + '">' + val.name + '</option>')
+                    );
+                });
+            }
         });
     </script>
 {% endblock %}
