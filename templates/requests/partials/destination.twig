@@ -1,0 +1,91 @@
+<button class="btn btn-info custom_subject pull-right">Custom</button>
+<!-- selectable subject !-->
+<div class="selectable_subject_div">
+    <div class="form-group col-md-4">
+        <label for="destination_country_id">Country</label>
+        <select class="form-control" id="destination_country_id" name="destination_country_id">
+            <option selected>Select your country</option>
+            {% for country in countries %}
+                <option value="{{ country.id }}">{{ country.name }}</option>
+            {% endfor %}
+        </select></div>
+    <div class="form-group col-md-4">
+        <label for="destination_city_id">City</label>
+        <select class="form-control" id="destination_city_id" name="destination_city_id">
+            <option selected>Select your city</option>
+        </select>
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_university_id">University</label>
+        <select class="form-control" id="destination_university_id" name="destination_university_id">
+            <option selected>Select your university</option>
+        </select>
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_centre_id">Centre</label>
+        <select class="form-control" id="destination_centre_id" name="destination_centre_id">
+            <option selected>Select your centre</option>
+        </select>
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_degree_id">Degree</label>
+        <select class="form-control" id="destination_degree_id" name="destination_degree_id">
+            <option selected>Select your degree</option>
+        </select>
+    </div>
+    <div class="form-group col-md-3">
+        <label for="destination_subject_code">Subject code</label>
+        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" value="" disabled>
+    </div>
+    <div class="form-group col-md-6">
+        <label for="destination_subject_id">Subject name</label>
+        <select class="form-control" id="destination_subject_id" name="destination_subject_id">
+            <option selected>Select your centre</option>
+        </select>
+    </div>
+    <div class="form-group col-md-2">
+        <label for="destination_subject_credits">Credits</label>
+        <input type="text" class="form-control" id="destination_subject_credits" name="destination_subject_credits" value="" disabled>
+    </div>
+</div>
+<!-- end selectable subject !-->
+<!-- custom subject !-->
+<div class="custom_subject_div" style="display: none;">
+    <div class="form-group col-md-4">
+        <label for="destination_country">Country</label>
+        <input type="text" class="form-control" id="destination_country" name="destination_country" placeholder="Country name" value="">
+    </div>
+    <div class="form-group col-md-4">
+        <label for="destination_city">City</label>
+        <input type="text" class="form-control" id="destination_city" name="destination_city" placeholder="City name" value="">
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_university">University</label>
+        <input type="text" class="form-control" id="destination_university" name="destination_university" placeholder="University name" value="">
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_centre">Centre</label>
+        <input type="text" class="form-control" id="destination_centre" name="destination_centre" placeholder="Centre name" value="">
+    </div>
+    <div class="form-group col-md-5">
+        <label for="destination_degree">Degree</label>
+        <input type="text" class="form-control" id="destination_degree" name="destination_degree" placeholder="Degree name" value="">
+    </div>
+    <div class="form-group col-md-3">
+        <label for="destination_subject_code">Subject code</label>
+        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" placeholder="Code" value="">
+    </div>
+    <div class="form-group col-md-6">
+        <label for="destination_subject">Subject name</label>
+        <input type="text" class="form-control" id="destination_subject" name="destination_subject" placeholder="Subject name" value="">
+    </div>
+    <div class="form-group col-md-2">
+        <label for="destination_subject_credits">Credits</label>
+        <input type="text" class="form-control" id="destination_subject_credits" name="destination_subject_credits" placeholder="Credits" value="">
+    </div>
+</div>
+<!-- end custom subject !-->
+<div class="form-group col-md-6">
+    <label for="destination_url">Url</label>
+    <input type="text" class="form-control" id="destination_url" name="destination_url" value="">
+</div>

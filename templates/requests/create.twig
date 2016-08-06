@@ -54,102 +54,25 @@
             </div>
         </div>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="destinations_div">
             <div class="panel-heading">
-                <h3 class="panel-title">Destination</h3>
+                <div class="row">
+                    <div class="pull-left" style="margin: 10px 0 0 20px;">
+                        <h3 class="panel-title">
+                            Destination
+                        </h3>
+                    </div>
+                    <div class="pull-right" style="margin: 0 10px 0 0;">
+                        <span class="btn btn-success" id="add_destination">Add</span>
+                        <span class="btn btn-danger" id="delete_destination">Delete</span>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                <div class="pull-right">
-                    <button class="btn btn-info" id="custom_subject">Custom</button>
-                </div>
-                <!-- selectable subject !-->
-                <div id="selectable_subject_div">
-                    <div class="form-group col-md-4">
-                        <label for="destination_country_id">Country</label>
-                        <select class="form-control" id="destination_country_id" name="destination_country_id">
-                            <option selected>Select your country</option>
-                            {% for country in countries %}
-                                <option value="{{ country.id }}">{{ country.name }}</option>
-                            {% endfor %}
-                        </select></div>
-                    <div class="form-group col-md-4">
-                        <label for="destination_city_id">City</label>
-                        <select class="form-control" id="destination_city_id" name="destination_city_id">
-                            <option selected>Select your city</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="destination_university_id">University</label>
-                        <select class="form-control" id="destination_university_id" name="destination_university_id">
-                            <option selected>Select your university</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="destination_centre_id">Centre</label>
-                        <select class="form-control" id="destination_centre_id" name="destination_centre_id">
-                            <option selected>Select your centre</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="destination_degree_id">Degree</label>
-                        <select class="form-control" id="destination_degree_id" name="destination_degree_id">
-                            <option selected>Select your degree</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="destination_subject_code">Subject code</label>
-                        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="destination_subject_id">Subject name</label>
-                        <select class="form-control" id="destination_subject_id" name="destination_subject_id">
-                            <option selected>Select your centre</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="destination_subject_credits">Credits</label>
-                        <input type="text" class="form-control" id="destination_subject_credits" name="destination_subject_credits" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="destination_url">Url</label>
-                        <input type="text" class="form-control" id="destination_url" name="destination_url" value="">
-                    </div>
-                </div>
-                <!-- end selectable subject !-->
-                <!-- custom subject !-->
-                <div id="custom_subject_div" style="display: none;">
-                    <div class="form-group col-md-3">
-                        <label for="destination_country">Country</label>
-                        <input type="text" class="form-control" id="destination_country" name="destination_country" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="destination_city">City</label>
-                        <input type="text" class="form-control" id="destination_city" name="destination_city" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-5">
-                        <label for="destination_centre">Centre</label>
-                        <input type="text" class="form-control" id="destination_centre" name="destination_centre" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="destination_subject_code">Subject code</label>
-                        <input type="text" class="form-control" id="destination_subject_code" name="destination_subject_code" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="destination_subject_id">Subject name</label>
-                        <input type="text" class="form-control" id="destination_subject_name" name="destination_subject_name" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="destination_subject_credits">Credits</label>
-                        <input type="text" class="form-control" id="destination_subject_credits" name="destination_subject_credits" value="" disabled>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="destination_url">Url</label>
-                        <input type="text" class="form-control" id="destination_url" name="destination_url" value="" disabled>
-                    </div>
-                </div>
-                <!-- end custom subject !-->
+            <div class="panel-body" id="destination_1" rel="1">
+                {% include 'requests/partials/destination.twig' %}
             </div>
         </div>
+
         <input type="submit" class="btn btn-info" value="Create">
     </form>
 {% endblock %}
@@ -157,6 +80,9 @@
 {% block javascripts %}
     <script>
         $(function () {
+
+            var destinationTemplate = '{% spaceless %}{% include 'requests/partials/destination.twig' %}{% endspaceless %}';
+            var nDestination = 2;
 
             var subjectCodes = {{ subject_codes | raw }};
             var subjectCredits = {{ subject_credits | raw }};
@@ -168,6 +94,25 @@
                         !isNaN($('#origin_subject_id').find(':selected').val()) &&
                         !isNaN($('#destination_subject_id').find(':selected').val()) &&
                         confirm('Have you finished?');
+            });
+
+            $('#add_destination').click(function () {
+                if (nDestination < 4) {
+                    $('#destinations_div').append(
+                            $('<div class="panel-body" id="destination_' + nDestination +
+                                    '" rel="' + nDestination + '">' + destinationTemplate + '</div>')
+                    );
+                    nDestination++;
+                }
+            });
+
+            $('#delete_destination').click(function () {
+                var children = $('#destinations_div').children();
+
+                if (children.length > 2) {
+                    children.last().remove();
+                    nDestination--;
+                }
             });
 
             $('#origin_subject_id').change(function () {
@@ -184,86 +129,92 @@
                 $('#origin_subject_credits').val(originSubjectCredits);
             });
 
-            $('#custom_subject').click(function (e) {
+            $(document).on('click', '.custom_subject', function (e) {
                 e.preventDefault();
 
-                $('#selectable_subject_div').toggle();
-                $('#custom_subject_div').show();
+                $(this).parent().find('.selectable_subject_div').toggle();
+                $(this).parent().find('.custom_subject_div').toggle();
             });
 
-            $('#destination_country_id').change(function () {
-                var countryId = $(this).val();
+            $(document).on('change', '#destination_country_id', function () {
+                var $this = $(this);
+                var countryId = $this.val();
 
                 $.ajax({
                     method: 'GET',
                     url: '/countries/' + countryId + '/cities',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    var $city = $('#destination_city_id');
+                    var $city = $this.parents('.selectable_subject_div').find('#destination_city_id');
                     updateSelectOptions($city, data);
                     $city.trigger('change');
                 });
             });
 
-            $('#destination_city_id').change(function () {
-                var cityId = $(this).val();
+            $(document).on('change', '#destination_city_id', function () {
+                var $this = $(this);
+                var cityId = $this.val();
 
                 $.ajax({
                     method: 'GET',
                     url: '/cities/' + cityId + '/universities',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    var $university = $('#destination_university_id');
+                    var $university = $this.parents('.selectable_subject_div').find('#destination_university_id');
                     updateSelectOptions($university, data);
                     $university.trigger('change');
                 });
             });
-            $('#destination_university_id').change(function () {
-                var universityId = $(this).val();
+            $(document).on('change', '#destination_university_id', function () {
+                var $this = $(this);
+                var universityId = $this.val();
 
                 $.ajax({
                     method: 'GET',
                     url: '/universities/' + universityId + '/centres',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    var $centre = $('#destination_centre_id');
+                    var $centre = $this.parents('.selectable_subject_div').find('#destination_centre_id');
                     updateSelectOptions($centre, data);
                     $centre.trigger('change');
                 });
             });
-            $('#destination_centre_id').change(function () {
-                var centreId = $(this).val();
+            $(document).on('change', '#destination_centre_id', function () {
+                var $this = $(this);
+                var centreId = $this.val();
 
                 $.ajax({
                     method: 'GET',
                     url: '/centres/' + centreId + '/degrees',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    var $degree = $('#destination_degree_id');
+                    var $degree = $this.parents('.selectable_subject_div').find('#destination_degree_id');
                     updateSelectOptions($degree, data);
                     $degree.trigger('change');
                 });
             });
-            $('#destination_degree_id').change(function () {
-                var degreeId = $(this).val();
+            $(document).on('change', '#destination_degree_id', function () {
+                var $this = $(this);
+                var degreeId = $this.val();
 
                 $.ajax({
                     method: 'GET',
                     url: '/degrees/' + degreeId + '/subjects',
                     dataType: 'JSON'
                 }).done(function (data) {
-                    var $subject = $('#destination_subject_id');
+                    var $subject = $this.parents('.selectable_subject_div').find('#destination_subject_id');
                     updateSelectOptions($subject, data);
                     destinationSubjects = data;
                     $subject.trigger('change');
                 });
             });
-            $('#destination_subject_id').change(function () {
-                var subjectIdx = $(this).prop('selectedIndex');
+            $(document).on('change', '#destination_subject_id', function () {
+                var $this = $(this);
+                var subjectIdx = $this.prop('selectedIndex');
 
                 var subject = destinationSubjects[subjectIdx];
-                $('#destination_subject_code').val(subject.code);
-                $('#destination_subject_credits').val(subject.credits);
+                $this.parents('.selectable_subject_div').find('#destination_subject_code').val(subject.code);
+                $this.parents('.selectable_subject_div').find('#destination_subject_credits').val(subject.credits);
             });
         });
 
