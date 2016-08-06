@@ -68,11 +68,12 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-body" id="destination_1" rel="1">
+            <div class="panel-body destination">
                 {% include 'requests/partials/destination.twig' %}
             </div>
         </div>
 
+        <input type="hidden" name="request_content" id="request_content">
         <input type="submit" class="btn btn-info" value="Create">
     </form>
 {% endblock %}
@@ -90,17 +91,22 @@
             var destinationSubjects = [];
 
             $('form').submit(function (e) {
-                return $('input[name="destination_url"]').val().length > 0 &&
+                var valid = $('input[name="destination_url"]').val().length > 0 &&
                         !isNaN($('#origin_subject_id').find(':selected').val()) &&
                         !isNaN($('#destination_subject_id').find(':selected').val()) &&
                         confirm('Have you finished?');
+
+                if (valid) {
+                    $('#request_content').val(JSON.stringify(saveRequest()));
+                }
+
+                return valid;
             });
 
             $('#add_destination').click(function () {
                 if (nDestination < 4) {
                     $('#destinations_div').append(
-                            $('<div class="panel-body" id="destination_' + nDestination +
-                                    '" rel="' + nDestination + '">' + destinationTemplate + '</div>')
+                            $('<div class="panel-body destination">' + destinationTemplate + '</div>')
                     );
                     nDestination++;
                 }
@@ -165,6 +171,7 @@
                     $university.trigger('change');
                 });
             });
+
             $(document).on('change', '#destination_university_id', function () {
                 var $this = $(this);
                 var universityId = $this.val();
@@ -179,6 +186,7 @@
                     $centre.trigger('change');
                 });
             });
+
             $(document).on('change', '#destination_centre_id', function () {
                 var $this = $(this);
                 var centreId = $this.val();
@@ -193,6 +201,7 @@
                     $degree.trigger('change');
                 });
             });
+
             $(document).on('change', '#destination_degree_id', function () {
                 var $this = $(this);
                 var degreeId = $this.val();
@@ -208,6 +217,7 @@
                     $subject.trigger('change');
                 });
             });
+
             $(document).on('change', '#destination_subject_id', function () {
                 var $this = $(this);
                 var subjectIdx = $this.prop('selectedIndex');
@@ -226,6 +236,50 @@
                         $('<option value="' + val.id + '">' + val.name + '</option>')
                 );
             });
+        }
+
+        function saveRequest () {
+            var result = {
+                destinations: []
+            };
+
+            result.origin_subject_id = $('#origin_subject_id').val();
+            result.mobility_type_id = $('input[name="mobility_type_id"]:checked').val();
+
+            var $destinationsDivs = $('#destinations_div').find('.destination');
+            $.each($destinationsDivs, function (idx, value) {
+                var $selector = $(value);
+                result.destinations.push(destinationToObject($selector));
+            });
+
+            return result;
+        }
+
+        function destinationToObject($selector) {
+            var result = {};
+
+            if ($selector.find('.selectable_subject_div').is(':visible')) {
+                $selector = $selector.find('.selectable_subject_div');
+                result = {
+                    destination_degree_id: $selector.find('#destination_degree_id').find(':selected').val(),
+                    destination_url: $selector.find('#destination_url').val()
+                };
+            } else {
+                $selector = $selector.find('.custom_subject_div');
+                result = {
+                    destination_country: $selector.find('#destination_country').val(),
+                    destination_city: $selector.find('#destination_city').val(),
+                    destination_university: $selector.find('#destination_university').val(),
+                    destination_centre: $selector.find('#destination_centre').val(),
+                    destination_degree: $selector.find('#destination_degree').val(),
+                    destination_subject_code: $selector.find('#destination_subject_code').val(),
+                    destination_subject: $selector.find('#destination_subject').val(),
+                    destination_subject_credits: $selector.find('#destination_subject_credits').val(),
+                    destination_url: $selector.find('#destination_url').val()
+                };
+            }
+
+            return result;
         }
     </script>
 {% endblock %}
