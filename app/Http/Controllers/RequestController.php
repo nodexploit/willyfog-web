@@ -62,7 +62,7 @@ class RequestController
         ]);
     }
 
-    public function create(Request $request, Response $response, $args)
+    public function form(Request $request, Response $response, $args)
     {
         $user = Auth::getInstance($this->ci)->user();
         $degree_name = $user->degree_name;
@@ -78,6 +78,30 @@ class RequestController
             'subject_credits'   => json_encode(array_column($subjects, 'credits')),
             'countries'         => $countries
         ]);
+    }
+
+    public function create(Request $request, Response $response, $args)
+    {
+        $request_content = $request->getParsedBodyParam('request_content');
+
+        $res = (new AuthorizedClient())->request('POST', '/api/v1/requests', [
+            'form_params' => [
+                'request_content' => $request_content
+            ]
+        ]);
+
+        $api_response = json_decode($res->getBody());
+
+        if ($api_response->status == 'Success') {
+            $request_id = $api_response->data;
+
+            return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
+        } else {
+            $this->ci->get('flash')->addMessage('error', $api_response->status);
+            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+
+            return $response->withStatus(302)->withHeader('Location', "/requests/new");
+        }
     }
 
     public function comment(Request $request, Response $response, $args)

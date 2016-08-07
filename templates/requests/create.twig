@@ -7,7 +7,7 @@
 
     <h4>{{ degree_name }}</h4>
 
-    <form method="POST" action="">
+    <form method="POST" action="/requests/new">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">Origin</h3>
@@ -261,8 +261,7 @@
             if ($selector.find('.selectable_subject_div').is(':visible')) {
                 $selector = $selector.find('.selectable_subject_div');
                 result = {
-                    destination_degree_id: $selector.find('#destination_degree_id').find(':selected').val(),
-                    destination_url: $selector.find('#destination_url').val()
+                    destination_subject_id: $selector.find('#destination_subject_id').find(':selected').val()
                 };
             } else {
                 $selector = $selector.find('.custom_subject_div');
@@ -274,10 +273,11 @@
                     destination_degree: $selector.find('#destination_degree').val(),
                     destination_subject_code: $selector.find('#destination_subject_code').val(),
                     destination_subject: $selector.find('#destination_subject').val(),
-                    destination_subject_credits: $selector.find('#destination_subject_credits').val(),
-                    destination_url: $selector.find('#destination_url').val()
+                    destination_subject_credits: $selector.find('#destination_subject_credits').val()
                 };
             }
+
+            result.destination_url = $selector.find('#destination_url').val();
 
             return result;
         }

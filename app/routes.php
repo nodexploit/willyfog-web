@@ -26,7 +26,8 @@ $app->group('', function () use ($namespace) {
 
     $this->get('/', "$namespace\\RequestController:index");
 
-    $this->get('/requests/new', "$namespace\\RequestController:create");
+    $this->get('/requests/new', "$namespace\\RequestController:form");
+    $this->post('/requests/new', "$namespace\\RequestController:create");
     $this->get('/requests/{id}', "$namespace\\RequestController:show");
     $this->post('/requests/{id}/comment', "$namespace\\RequestController:comment");
 
