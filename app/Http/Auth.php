@@ -78,7 +78,14 @@ class Auth
 
     public function userId()
     {
-        return $this->getAuthSession()['user_id'];
+        $user_id = $this->getAuthSession()['user_id'];
+
+        if ($user_id === null) { // Session lost, logout the user so cookies are deleted
+            header('Location: /logout');
+            die;
+        }
+
+        return $user_id;
     }
     
     private function cacheUserInfo($user_info)

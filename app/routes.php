@@ -31,5 +31,7 @@ $app->group('', function () use ($namespace) {
     $this->get('/requests/{id}', "$namespace\\RequestController:show");
     $this->post('/requests/{id}/comment', "$namespace\\RequestController:comment");
 
+    $this->get('/users/{id}/notifications', "$namespace\\UserController:notifications");
+
     $this->get('/search', "$namespace\\SearchController:results");
 })->add($authenticate);

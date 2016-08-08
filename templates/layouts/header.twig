@@ -22,6 +22,14 @@
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-asterisk" aria-hidden="true" id="notifications-icon" style="opacity: 0.5;"></span>
+                    </a>
+                    <ul class="dropdown-menu" style="overflow-y: scroll; height: 150px; width: 350px;" id="user-notifications">
+                    {# user notifications dynamically loaded #}
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {{ auth.user.name }} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -39,3 +47,46 @@
 
     </div><!-- /.container-fluid -->
 </nav>
+
+{% block javascripts %}
+    {% if auth.isLoggedIn %}
+    <script>
+        $(function () {
+            $('#notifications-icon').mouseover(function () {
+                $(this).css('opacity', 1);
+            });
+            $('#notifications-icon').mouseout(function () {
+                $(this).css('opacity', 0.5);
+            });
+
+            getUserNotifications();
+        });
+
+        function getUserNotifications() {
+            $.ajax({
+                method: 'GET',
+                url: '/users/' + {{ auth.userId }} + '/notifications',
+                dataType: 'JSON'
+            }).done(function (data) {
+                populateNotifications(data);
+            });
+        }
+
+        function populateNotifications(notifications) {
+            if (notifications.length > 0) {
+                $('#notifications-icon').css('color', 'blue');
+                $('#notifications-icon').css('opacity', 0.5);
+                $('#user-notifications').html();
+
+                $.each(notifications, function (idx, value) {
+                    $('#user-notifications').append(
+                            $('<li style="margin: 10px">' + value.content + '</li>')
+                    ).append($('<hr>'));
+                });
+            } else {
+                $('#user-notifications').html('<li style="margin: 10px">You don\'t have any new notification.</li>');
+            }
+        }
+    </script>
+    {% endif %}
+{% endblock %}
