@@ -4,6 +4,7 @@
 namespace App\Http;
 
 
+use App\Models\Role;
 use Interop\Container\ContainerInterface;
 
 class Auth
@@ -86,6 +87,34 @@ class Auth
         }
 
         return $user_id;
+    }
+
+    public function isAdmin()
+    {
+        $user_info = $this->getCachedUserInfo();
+
+        return $user_info->role_id == Role::$ADMIN;
+    }
+
+    public function isCoordinator()
+    {
+        $user_info = $this->getCachedUserInfo();
+
+        return $user_info->role_id == Role::$COORD;
+    }
+
+    public function isRecognizer()
+    {
+        $user_info = $this->getCachedUserInfo();
+
+        return $user_info->role_id == Role::$RECOG;
+    }
+
+    public function isStudent()
+    {
+        $user_info = $this->getCachedUserInfo();
+
+        return $user_info->role_id == Role::$STUDENT;
     }
     
     private function cacheUserInfo($user_info)

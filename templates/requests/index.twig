@@ -43,7 +43,9 @@
 
     <br>
 
-    <a href="/requests/new" class="btn btn-success">Create new request</a>
+    {% if auth.isStudent %}
+        <a href="/requests/new" class="btn btn-success">Create new request</a>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}
