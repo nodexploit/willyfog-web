@@ -19,6 +19,12 @@ $app->group('', function () use ($namespace) {
     $this->post('/register', "$namespace\\LoginController:register");
     $this->get('/openid', "$namespace\\LoginController:openid");
     $this->get('/login/callback', "$namespace\\LoginController:loginCallback");
+
+    // Temp
+    $this->get('/users/register/recognizer', "$namespace\\UserController:showRegisterRecognizer");
+    $this->post('/users/register/recognizer', "$namespace\\UserController:registerRecognizer");
+    $this->get('/users/register/coordinator', "$namespace\\UserController:showRegisterCoordinator");
+
 })->add($guest);
 
 $app->group('', function () use ($namespace) {
@@ -32,6 +38,12 @@ $app->group('', function () use ($namespace) {
     $this->post('/requests/{id}/comment', "$namespace\\RequestController:comment");
 
     $this->get('/users/{id}/notifications', "$namespace\\UserController:notifications");
+
+    // Recognizer
+
+
+    // Coordinator
+    $this->post('/users/register/coordinator', "$namespace\\UserController:registerCoordinator");
 
     $this->get('/search', "$namespace\\SearchController:results");
 })->add($authenticate);

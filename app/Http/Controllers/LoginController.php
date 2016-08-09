@@ -112,6 +112,7 @@ class LoginController
                 'email'     => $params['email'],
                 'digest'    => $params['password'],
                 'degree_id' => $params['degree_id'],
+                'role_id'   => 4
             ]
         ]);
 
