@@ -4,16 +4,38 @@
 
 {% block content %}
 
-    <h1>Origin</h1>
+    <h1>
+        Origin
+        <div class="pull-right">
+        {% if request.accepted %}
+            <p style="color: green">Accepted</p>
+        {% elseif request.rejected %}
+            <p style="color: red">Rejected</p>
+        {% else %}
+            {% if auth.isRecognizer %}
+                <button class="btn btn-success" id="accept-request">Accept</button>
+                <button class="btn btn-danger" id="decline-request">Decline</button>
+            {% endif %}
+        {% endif %}
+        </div>
+    </h1>
+
+
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <p>Subject: <b>{{ request.subject_name }}</b></p>
-            <p>Code: <b>{{ request.subject_code }}</b></p>
-            <p>Degree: <b>{{ request.degree_name }}</b></p>
-            <p>Centre: <b>{{ request.centre_name }}</b></p>
-            <p>University: <b>{{ request.university_name }}</b></p>
-            <p>Mobility type: <b>{{ request.mobility_type }}</b></p>
+            <div class="col-md-2">
+                <p>Code: <b>{{ request.subject_code }}</b></p>
+            </div>
+            <div class="col-md-6">
+                <p>Subject: <b>{{ request.subject_name }}</b></p>
+            </div>
+            <div class="col-md-2">
+                <p>Credits: <b>{{ request.subject_credits }}</b></p>
+            </div>
+            <div class="col-md-2">
+                <p>Mobility type: <b>{{ request.mobility_type }}</b></p>
+            </div>
         </div>
     </div>
 
@@ -22,9 +44,33 @@
     {% for destination in request.destination_subjects %}
         <div class="panel panel-default">
             <div class="panel-body">
-                <p>Subject: <b>{{ destination.subject_name }}</b></p>
-                <p>Code: <b>{{ destination.subject_code }}</b></p>
-                <p>Centre: <b>{{ destination.centre_name }}</b></p>
+                <div class="col-md-4">
+                    <p>Code: <b>{{ destination.subject_code }}</b></p>
+                </div>
+                <div class="col-md-6">
+                    <p>Subject: <b>{{ destination.subject_name }}</b></p>
+                </div>
+                <div class="col-md-2">
+                    <p>Credits: <b>{{ destination.subject_credits }}</b></p>
+                </div>
+                <div class="col-md-12">
+                    <p>Degree: <b>{{ destination.degree }}</b></p>
+                </div>
+                <div class="col-md-12">
+                    <p>Centre: <b>{{ destination.centre }}</b></p>
+                </div>
+                <div class="col-md-12">
+                    <p>University: <b>{{ destination.university }}</b></p>
+                </div>
+                <div class="col-md-6">
+                    <p>City: <b>{{ destination.city }}</b></p>
+                </div>
+                <div class="col-md-6">
+                    <p>Country: <b>{{ destination.country }}</b></p>
+                </div>
+                <div class="col-md-12">
+                    <p>Url: <b>{{ destination.uri }}</b></p>
+                </div>
             </div>
         </div>
     {% endfor %}
@@ -65,6 +111,44 @@
                 return $('#comment').val().length > 0 &&
                         confirm("Are you sure ?");
             });
+
+            {% if auth.isRecognizer %}
+            $('#accept-request').click(function (e) {
+                e.preventDefault();
+
+                if (confirm("Are you sure ?")) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '/requests/' + {{ request.id }} + '/accept',
+                        dataType: 'JSON'
+                    }).done(function (data) {
+                        if (data.status == 'Success') {
+                            alert("You successfully accepted the request.")
+                        } else {
+                            alert("Ups something went wrong.")
+                        }
+                    });
+                }
+            });
+
+            $('#decline-request').click(function (e) {
+                e.preventDefault();
+
+                if (confirm("Are your sure ?")) {
+                    $.ajax({
+                        method: 'POST',
+                        url: '/requests/' + {{ request.id }} + '/reject',
+                        dataType: 'JSON'
+                    }).done(function (data) {
+                        if (data.status == 'Success') {
+                            alert("You successfully declined the request.")
+                        } else {
+                            alert("Ups something went wrong.")
+                        }
+                    });
+                }
+            });
+            {% endif %}
         });
     </script>
 {% endblock %}

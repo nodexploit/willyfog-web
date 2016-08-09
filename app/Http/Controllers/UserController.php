@@ -4,7 +4,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\AuthorizedClient;
-use App\Models\City;
 use Slim\Http\Request;
 use Slim\Http\Response;
 

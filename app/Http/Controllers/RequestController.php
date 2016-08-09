@@ -126,4 +126,22 @@ class RequestController
             return $response->withStatus(302)->withHeader('Location', "/requests/$request_id");
         }
     }
+
+    public function accept(Request $request, Response $response, array $args)
+    {
+        $request_id = $args['id'];
+
+        $res = (new AuthorizedClient())->request('POST', "/api/v1/requests/$request_id/accept");
+
+        return $response->withJson(json_decode($res->getBody()));
+    }
+
+    public function reject(Request $request, Response $response, array $args)
+    {
+        $request_id = $args['id'];
+
+        $res = (new AuthorizedClient())->request('POST', "/api/v1/requests/$request_id/reject");
+
+        return $response->withJson(json_decode($res->getBody()));
+    }
 }

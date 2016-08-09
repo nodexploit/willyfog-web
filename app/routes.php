@@ -30,6 +30,8 @@ $app->group('', function () use ($namespace) {
     $this->post('/requests/new', "$namespace\\RequestController:create");
     $this->get('/requests/{id}', "$namespace\\RequestController:show");
     $this->post('/requests/{id}/comment', "$namespace\\RequestController:comment");
+    $this->post('/requests/{id}/accept', "$namespace\\RequestController:accept");
+    $this->post('/requests/{id}/reject', "$namespace\\RequestController:reject");
 
     $this->get('/users/{id}/notifications', "$namespace\\UserController:notifications");
 
