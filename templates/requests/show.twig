@@ -15,6 +15,8 @@
             {% if auth.isRecognizer %}
                 <button class="btn btn-success" id="accept-request">Accept</button>
                 <button class="btn btn-danger" id="decline-request">Decline</button>
+            {% else %}
+                <p style="color: grey">Pending</p>
             {% endif %}
         {% endif %}
         </div>
