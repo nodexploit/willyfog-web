@@ -2,9 +2,6 @@
 
 $namespace = '\App\Http\Controllers';
 
-$guest = new \App\Http\Middleware\GuestMiddleware();
-$authenticate = new \App\Http\Middleware\AuthenticateMiddleware();
-
 $app->group('', function () use ($namespace) {
     $this->get('/countries/{id}/cities', "$namespace\\CountryController:cities");
     $this->get('/cities/{id}/universities', "$namespace\\CityController:universities");
