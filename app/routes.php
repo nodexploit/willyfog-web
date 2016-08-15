@@ -16,12 +16,6 @@ $app->group('', function () use ($namespace) {
     $this->post('/register', "$namespace\\UserController:register");
     $this->get('/openid', "$namespace\\LoginController:openid");
     $this->get('/login/callback', "$namespace\\LoginController:loginCallback");
-
-    // Temp
-    $this->get('/users/register/recognizer', "$namespace\\UserController:showRegisterRecognizer");
-    $this->post('/users/register/recognizer', "$namespace\\UserController:registerRecognizer");
-    $this->get('/users/register/coordinator', "$namespace\\UserController:showRegisterCoordinator");
-
 })->add($guest);
 
 $app->group('', function () use ($namespace) {
@@ -39,9 +33,10 @@ $app->group('', function () use ($namespace) {
     $this->get('/users/{id}/notifications', "$namespace\\UserController:notifications");
 
     // Recognizer
-
-
+    $this->get('/users/register/recognizer', "$namespace\\UserController:showRegisterRecognizer");
+    $this->post('/users/register/recognizer', "$namespace\\UserController:registerRecognizer");
     // Coordinator
+    $this->get('/users/register/coordinator', "$namespace\\UserController:showRegisterCoordinator");
     $this->post('/users/register/coordinator', "$namespace\\UserController:registerCoordinator");
 
     $this->get('/search', "$namespace\\SearchController:results");

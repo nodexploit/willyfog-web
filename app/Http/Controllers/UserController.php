@@ -55,21 +55,15 @@ class UserController
             return $response->withStatus(302)->withHeader('Location', '/register');
         }
 
-        $res = (new WebClient([
-            'base_uri'  => OPENID_URI
-        ], false))->request('POST', '/api/v1/users/new', [
-            'form_params' => [
-                'name'      => $params['name'],
-                'surname'   => $params['surname'],
-                'nif'       => $params['nif'],
-                'email'     => $params['email'],
-                'digest'    => $params['password'],
-                'degree_id' => $params['degree_id'],
-                'role_id'   => Role::$STUDENT
-            ]
-        ]);
-
-        $api_response = json_decode($res->getBody());
+        $api_response = $this->registerUser(
+            $params['name'],
+            $params['surname'],
+            $params['nif'],
+            $params['email'],
+            $params['password'],
+            $params['degree_id'],
+            Role::$STUDENT
+        );
 
         if ($api_response->status == "Success") {
             $this->ci->get('flash')->addMessage('success', 'User successfully created. Please log in.');
@@ -151,5 +145,31 @@ class UserController
 
             return $response->withStatus(302)->withHeader('Location', '/register');
         }
+    }
+
+    private function registerUser(
+        $name,
+        $surname,
+        $nif,
+        $email,
+        $password,
+        $degree_id,
+        $role_id
+    ) {
+        $res = (new WebClient([
+            'base_uri'  => OPENID_URI
+        ], false))->request('POST', '/api/v1/users/new', [
+            'form_params' => [
+                'name'      => $name,
+                'surname'   => $surname,
+                'nif'       => $nif,
+                'email'     => $email,
+                'digest'    => $password,
+                'degree_id' => $degree_id,
+                'role_id'   => $role_id
+            ]
+        ]);
+
+        return json_decode($res->getBody());
     }
 }
