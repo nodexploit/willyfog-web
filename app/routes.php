@@ -12,8 +12,8 @@ $app->group('', function () use ($namespace) {
 
 $app->group('', function () use ($namespace) {
     $this->get('/guest', "$namespace\\LoginController:showWelcome");
-    $this->get('/register', "$namespace\\LoginController:showRegister");
-    $this->post('/register', "$namespace\\LoginController:register");
+    $this->get('/register', "$namespace\\UserController:showRegister");
+    $this->post('/register', "$namespace\\UserController:register");
     $this->get('/openid', "$namespace\\LoginController:openid");
     $this->get('/login/callback', "$namespace\\LoginController:loginCallback");
 

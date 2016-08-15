@@ -85,49 +85,6 @@ class LoginController
         return $this->unsetCookie($response);
     }
 
-    public function showRegister(Request $request, Response $response, $args)
-    {
-        return $this->ci->get('view')->render($response, 'register.twig', [
-            'universities' => \App\Models\University::all()
-        ]);
-    }
-
-    /**
-     * TODO: handle registration failure
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param $args
-     * @return static
-     */
-    public function register(Request $request, Response $response, $args)
-    {
-        $params = $request->getParsedBody();
-
-        $res = (new WebClient())->request('POST', '/api/v1/users/register', [
-            'form_params' => [
-                'name'      => $params['name'],
-                'surname'   => $params['surname'],
-                'nif'       => $params['nif'],
-                'email'     => $params['email'],
-                'digest'    => $params['password'],
-                'degree_id' => $params['degree_id'],
-                'role_id'   => 4
-            ]
-        ]);
-
-        $api_response = json_decode($res->getBody());
-
-        if ($api_response->status == "Success") {
-            return $response->withStatus(302)->withHeader('Location', '/');
-        } else {
-            $this->ci->get('flash')->addMessage('error', $api_response->status);
-            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
-
-            return $response->withStatus(302)->withHeader('Location', '/register');
-        }
-    }
-
     /**
      * TODO: handle absence of pubkey.pem
      *

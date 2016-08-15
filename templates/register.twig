@@ -7,8 +7,10 @@
 
     {% if flash.getMessage('error') %}
         <div class="alert alert-danger" role="alert">
-            {{ flash.getMessage('error')[0] }}:
-            {{ flash.getMessage('messages')[0] }}
+            {{ flash.getMessage('error')[0] }}
+            {% if flash.getMessage('messages') %}
+                : {{ flash.getMessage('messages')[0] }}
+            {% endif %}
         </div>
     {% endif %}
 

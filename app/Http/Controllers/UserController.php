@@ -4,6 +4,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\AuthorizedClient;
+use App\Models\Role;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Interop\Container\ContainerInterface;
@@ -27,6 +28,59 @@ class UserController
         $api_response = json_decode($res->getBody());
 
         return $response->withJson($api_response);
+    }
+
+    public function showRegister(Request $request, Response $response, $args)
+    {
+        return $this->ci->get('view')->render($response, 'register.twig', [
+            'universities' => \App\Models\University::all()
+        ]);
+    }
+
+    /**
+     * TODO: handle registration failure
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return static
+     */
+    public function register(Request $request, Response $response, $args)
+    {
+        $params = $request->getParsedBody();
+
+        if ($params['password'] != $params['password_confirmation']) {
+            $this->ci->get('flash')->addMessage('error', 'Your password does not equals to your confirmation.');
+
+            return $response->withStatus(302)->withHeader('Location', '/register');
+        }
+
+        $res = (new WebClient([
+            'base_uri'  => OPENID_URI
+        ], false))->request('POST', '/api/v1/users/new', [
+            'form_params' => [
+                'name'      => $params['name'],
+                'surname'   => $params['surname'],
+                'nif'       => $params['nif'],
+                'email'     => $params['email'],
+                'digest'    => $params['password'],
+                'degree_id' => $params['degree_id'],
+                'role_id'   => Role::$STUDENT
+            ]
+        ]);
+
+        $api_response = json_decode($res->getBody());
+
+        if ($api_response->status == "Success") {
+            $this->ci->get('flash')->addMessage('success', 'User successfully created. Please log in.');
+
+            return $response->withStatus(302)->withHeader('Location', '/');
+        } else {
+            $this->ci->get('flash')->addMessage('error', $api_response->status);
+            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+
+            return $response->withStatus(302)->withHeader('Location', '/register');
+        }
     }
 
     public function showRegisterRecognizer(Request $request, Response $response, $args)
@@ -55,7 +109,7 @@ class UserController
                 'email'     => $params['email'],
                 'digest'    => $params['password'],
                 'degree_id' => $params['degree_id'],
-                'role_id'   => 3
+                'role_id'   => Role::$RECOG
             ]
         ]);
 
@@ -83,7 +137,7 @@ class UserController
                 'email'     => $params['email'],
                 'digest'    => $params['password'],
                 'degree_id' => $params['degree_id'],
-                'role_id'   => 2
+                'role_id'   => Role::$COORD
             ]
         ]);
 

@@ -14,13 +14,17 @@ use GuzzleHttp\Exception\RequestException;
  */
 class WebClient extends \GuzzleHttp\Client
 {
-    public function __construct(array $config = [])
+    public function __construct(array $config = [], $replace = true)
     {
-        parent::__construct(
-            array_replace($config, [
-                'base_uri'      => API_URI
-            ])
-        );
+        if ($replace) {
+            parent::__construct(
+                array_replace($config, [
+                    'base_uri'      => API_URI
+                ])
+            );
+        } else {
+            parent::__construct($config);
+        }
     }
 
     /**
