@@ -7,15 +7,9 @@
 {% endblock %}
 
 {% block content %}
-
-    <h1>Hello {{ auth.user.name }} !</h1>
-
     <h3>Here are your open requests:</h3>
-
     <br>
-
     <div class="row">
-        <div class="col-md-6">
         <table id="requests" class="display">
             <thead>
             <tr>
@@ -38,7 +32,6 @@
             {% endfor %}
             </tbody>
         </table>
-        </div>
     </div>
 
     <br>
