@@ -7,31 +7,36 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Here are your open requests:</h3>
-    <br>
-    <div class="row">
-        <table id="requests" class="display">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Code</th>
-                <th>Name</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for request in requests %}
-                <tr>
-                    <td class="col-md-1">{{ request.id }}</td>
-                    <td class="col-md-2">{{ request.subject_code }}</td>
-                    <td>
-                        <a href="/requests/{{ request.id }}">
-                            {{ request.subject_name }}
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#pending" aria-controls="pending" role="tab" data-toggle="tab">
+                Pending
+                <span class="badge">{{ total_pending }}</span>
+            </a>
+        </li>
+        <li role="presentation">
+            <a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">
+                Closed
+                <span class="badge">{{ total_closed }}</span>
+            </a>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Pending -->
+        <div role="tabpanel" class="tab-pane active" id="pending">
+            <h3>Here are your open requests:</h3>
+            <br>
+            {% include 'requests/partials/index-table.twig' with
+                { 'table_id': 'pending_requests', 'requests': requests.pending } %}
+        </div>
+        <!-- Closed -->
+        <div role="tabpanel" class="tab-pane" id="closed">
+            <h3>Here are your closed requests:</h3>
+            <br>
+            {% include 'requests/partials/index-table.twig' with
+                { 'table_id': 'closed_requests', 'requests': requests.closed } %}
+        </div>
     </div>
 
     <br>
@@ -46,7 +51,8 @@
 
     <script>
         $(function () {
-            $('#requests').DataTable();
+            $('#pending_requests').DataTable();
+            $('#closed_requests').DataTable();
         });
     </script>
 {% endblock %}

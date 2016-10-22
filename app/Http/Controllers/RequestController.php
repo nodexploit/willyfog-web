@@ -34,6 +34,8 @@ class RequestController
 
         return $this->ci->get('view')->render($response, 'requests/index.twig', [
             'requests' => $requests,
+            'total_pending' => count($requests->pending),
+            'total_closed' => count($requests->closed),
         ]);
     }
 

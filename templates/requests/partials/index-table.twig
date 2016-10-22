@@ -1,0 +1,38 @@
+<div class="row">
+    <table id="{{ table_id }}" class="display">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            {% if table_id == "closed_requests" %} <th>Status</th> {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for request in requests %}
+            <tr>
+                <td class="col-md-1">{{ request.id }}</td>
+                <td class="col-md-2">{{ request.subject_code }}</td>
+                <td class="col-md-4">
+                    <a href="/requests/{{ request.id }}">
+                        {{ request.subject_name }}
+                    </a>
+                </td>
+                <td class="col-md-2">{{ request.mobility_type }}</td>
+            {% if table_id == "closed_requests" %}
+                <td class="col-md-2">
+                    {% if "accepted" == request.status  %}
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Accepted
+                    {% else %}
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        Rejected
+                    {% endif %}
+                </td>
+            {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
