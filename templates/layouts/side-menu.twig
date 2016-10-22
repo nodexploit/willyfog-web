@@ -3,9 +3,11 @@
     <img src="{{ auth.user.gravatar }}?s=200">
     <br><br>
     <p><b>Role: </b>{{ auth.user.role_name }}</p>
+    {% if auth.isStudent %}
     <p><b>Degree: </b><br>{{ auth.user.degree_name }}</p>
     <p><b>Centre: </b><br>{{ auth.user.centre_name }}</p>
     <p><b>University: </b><br>{{ auth.user.university_name }}</p>
+    {% endif %}
 {% else %}
     <h2>Hello guest!</h2>
     {% if session.params.gravatar_uri %}

@@ -32,6 +32,7 @@ $app->group('', function () use ($namespace) {
 
     $this->get('/users/{id}/notifications', "$namespace\\UserController:notifications");
 
+    $this->get('/subjects', "$namespace\\SubjectController:showRecognizerSubjects");
     // Recognizer
     $this->get('/users/register/recognizer', "$namespace\\UserController:showRegisterRecognizer");
     $this->post('/users/register/recognizer', "$namespace\\UserController:registerRecognizer");
