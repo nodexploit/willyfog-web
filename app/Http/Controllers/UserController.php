@@ -86,7 +86,7 @@ class UserController
     {
         $auth = Auth::getInstance($this->ci);
 
-        if (!$auth->isRecognizer()) {
+        if (!$auth->isAdmin()) {
             return $response->withStatus(302)->withHeader('Location', '/');
         }
 
@@ -99,10 +99,10 @@ class UserController
     {
         $params = $request->getParsedBody();
 
-        $api_response = $this->registerUser($params, Role::$RECOG);
+        $api_response = $this->registerUser($params, Role::$COORD);
 
         if ($api_response->status == "Success") {
-            $this->ci->get('flash')->addMessage('success', 'Recognizer successfully created.');
+            $this->ci->get('flash')->addMessage('success', 'Coordinator successfully created.');
 
             return $response->withStatus(302)->withHeader('Location', '/');
         } else {
@@ -110,7 +110,7 @@ class UserController
             $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
             $this->ci->get('session')->set('params', $params);
 
-            return $response->withStatus(302)->withHeader('Location', '/users/register/recognizer');
+            return $response->withStatus(302)->withHeader('Location', '/users/register/coordinator');
         }
     }
 
