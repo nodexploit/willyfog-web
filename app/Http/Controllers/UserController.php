@@ -51,6 +51,7 @@ class UserController
 
         if ($params['password'] != $params['password_confirmation']) {
             $this->ci->get('flash')->addMessage('error', 'Your password does not equals to your confirmation.');
+            $this->ci->get('session')->set('params', $params);
 
             return $response->withStatus(302)->withHeader('Location', '/register');
         }
