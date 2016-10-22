@@ -24,6 +24,8 @@ class LoginController
 
     public function showWelcome(Request $request, Response $response, $args)
     {
+        $this->ci->get('session')->delete('params');
+
         return $this->ci->get('view')->render($response, 'welcome.twig');
     }
 
