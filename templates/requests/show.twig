@@ -7,10 +7,16 @@
     <h1>
         Origin
         <div class="pull-right">
-        {% if request.accepted %}
-            <p style="color: green">Accepted</p>
-        {% elseif request.rejected %}
-            <p style="color: red">Rejected</p>
+        {% if "accepted" == request.status %}
+            <p style="color: green">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                Accepted
+            </p>
+        {% elseif "rejected" == request.status %}
+            <p style="color: red">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                Rejected
+            </p>
         {% else %}
             {% if auth.isRecognizer %}
                 <button class="btn btn-success" id="accept-request">Accept</button>

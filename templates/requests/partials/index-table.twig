@@ -6,7 +6,7 @@
             <th>Code</th>
             <th>Name</th>
             <th>Type</th>
-            {% if table_id == "closed_requests" %} <th>Status</th> {% endif %}
+            {% if "closed_requests" == table_id %} <th>Status</th> {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                     </a>
                 </td>
                 <td class="col-md-2">{{ request.mobility_type }}</td>
-            {% if table_id == "closed_requests" %}
+            {% if "closed_requests" == table_id %}
                 <td class="col-md-2">
                     {% if "accepted" == request.status  %}
                         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
