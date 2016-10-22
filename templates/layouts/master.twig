@@ -19,12 +19,7 @@
             {% include 'layouts/header.twig' %}
         </header>
 
-        <div class="col-md-3">
-            {% include 'layouts/side-menu.twig' %}
-        </div>
-        <div class="col-md-9">
-            {% block content %}{% endblock %}
-        </div>
+        {% block content %}{% endblock %}
 
         {% block javascripts %}
         {% endblock %}

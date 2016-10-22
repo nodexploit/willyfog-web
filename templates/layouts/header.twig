@@ -21,7 +21,7 @@
             </form>
             {% if auth.isRecognizer %}
             <ul class="nav navbar-nav">
-                <li><a href="/subjects">My recognized subjects</a></li>
+                <li><a href="/subjects">My subjects</a></li>
             </ul>
             {% endif %}
             <ul class="nav navbar-nav navbar-right">
@@ -38,12 +38,12 @@
                         {{ auth.user.name }} <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="/logout">Logout</a></li>
                         {% if auth.isCoordinator %}
-                            <li role="separator" class="divider"></li>
                             <li><a href="/users/register/recognizer">Recognizer Registration</a></li>
                             <li><a href="/users/register/coordinator">Coordinator Registration</a></li>
+                            <li role="separator" class="divider"></li>
                         {% endif %}
+                        <li><a href="/logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>

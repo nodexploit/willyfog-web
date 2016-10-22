@@ -8,25 +8,29 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
-        <table id="results" class="display">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Subject</th>
-                <th>Equivalent Subject</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for result in results %}
+        <div class="col-md-12">
+            <h3>Results of search '{{ query }}': </h3>
+
+            <br>
+
+            <table id="results" class="display">
+                <thead>
                 <tr>
-                    <td class="col-md-1">{{ result.id }}</td>
-                    <td class="col-md-2">{{ result.subject_name }}</td>
-                    <td class="col-md-2">{{ result.equivalent_name }}</td>
+                    <th>#</th>
+                    <th>Subject</th>
+                    <th>Equivalent Subject</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td class="col-md-1">{{ result.id }}</td>
+                        <td class="col-md-5">{{ result.subject_name }}</td>
+                        <td class="col-md-5">{{ result.equivalent_name }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

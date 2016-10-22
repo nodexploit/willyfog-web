@@ -15,7 +15,6 @@
     {% endif %}
 
     <form method="POST" action="/register">
-        <input type="hidden" value="" name="gravatar_uri" id="gravatar_uri">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="name">Name</label>
@@ -81,23 +80,12 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="/js/md5.min.js"></script>
-
     <script>
         $(function () {
             var $university = $('#university');
 
             $('form').submit(function () {
                 return getDynamicSelectorValue($university) != 0;
-            });
-
-            $('#email').focusout(function () {
-                var email = $(this).val();
-                var hash = md5(email);
-                var gravatar = 'https://www.gravatar.com/avatar/' + hash  + "?s=200";
-
-                $("#gravatar").attr('src', gravatar);
-                $("#gravatar_uri").val(gravatar);
             });
 
             $university.change(function () {

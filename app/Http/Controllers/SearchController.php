@@ -38,7 +38,8 @@ class SearchController
         }
 
         return $this->ci->get('view')->render($response, 'search/results.twig', [
-            'results' => $results,
+            'results'   => $results,
+            'query'     => $query
         ]);
     }
 }

@@ -4,6 +4,12 @@
 
 {% block content %}
 
+    {% if not auth.isStudent %}
+        <b>Created by</b>: <br>
+        {{ request.student_name }} {{ request.student_surname }} - {{ request.student_email }} <br>
+        at {{ request.created_at }}
+    {% endif %}
+
     <h1>
         Origin
         <div class="pull-right">

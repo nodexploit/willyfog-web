@@ -7,6 +7,18 @@
 {% endblock %}
 
 {% block content %}
+    <div class="col-md-3">
+        <h2>Hello {{ auth.user.name }} {{ auth.user.surname }} !</h2>
+        <img src="{{ auth.user.gravatar }}?s=200">
+        <br><br>
+        <p><b>Role: </b>{{ auth.user.role_name }}</p>
+        {% if auth.isStudent %}
+            <p><b>Degree: </b><br>{{ auth.user.degree_name }}</p>
+            <p><b>Centre: </b><br>{{ auth.user.centre_name }}</p>
+            <p><b>University: </b><br>{{ auth.user.university_name }}</p>
+        {% endif %}
+    </div>
+    <div class="col-md-9">
     <ul class="nav nav-tabs" role="tablist">
         <li role="presentation" class="active">
             <a href="#pending" aria-controls="pending" role="tab" data-toggle="tab">
@@ -44,6 +56,7 @@
     {% if auth.isStudent %}
         <a href="/requests/new" class="btn btn-success">Create new request</a>
     {% endif %}
+    </div>
 {% endblock %}
 
 {% block javascripts %}
