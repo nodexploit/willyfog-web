@@ -19,6 +19,12 @@
             {% include 'layouts/header.twig' %}
         </header>
 
+        {% if flash.getMessage('success') %}
+            <div class="alert alert-success" role="alert">
+                {{ flash.getMessage('success')[0] }}
+            </div>
+        {% endif %}
+
         {% block content %}{% endblock %}
 
         {% block javascripts %}

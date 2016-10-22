@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Auth;
 use App\Http\AuthorizedClient;
 use App\Models\Role;
 use Slim\Http\Request;
@@ -38,7 +39,6 @@ class UserController
     }
 
     /**
-     * TODO: handle registration failure
      *
      * @param Request $request
      * @param Response $response
@@ -73,13 +73,23 @@ class UserController
 
     public function showRegisterRecognizer(Request $request, Response $response, $args)
     {
-        return $this->ci->get('view')->render($response, 'recognizer/register.twig', [
-            'universities' => \App\Models\University::all()
-        ]);
+        $auth = Auth::getInstance($this->ci);
+
+        if (!$auth->isCoordinator()) {
+            return $response->withStatus(302)->withHeader('Location', '/');
+        }
+
+        return $this->ci->get('view')->render($response, 'recognizer/register.twig');
     }
 
     public function showRegisterCoordinator(Request $request, Response $response, $args)
     {
+        $auth = Auth::getInstance($this->ci);
+
+        if (!$auth->isRecognizer()) {
+            return $response->withStatus(302)->withHeader('Location', '/');
+        }
+
         return $this->ci->get('view')->render($response, 'coordinator/register.twig', [
             'universities' => \App\Models\University::all()
         ]);
@@ -89,27 +99,18 @@ class UserController
     {
         $params = $request->getParsedBody();
 
-        $res = (new WebClient())->request('POST', '/api/v1/users/register', [
-            'form_params' => [
-                'name'      => $params['name'],
-                'surname'   => $params['surname'],
-                'nif'       => $params['nif'],
-                'email'     => $params['email'],
-                'digest'    => $params['password'],
-                'degree_id' => $params['degree_id'],
-                'role_id'   => Role::$RECOG
-            ]
-        ]);
-
-        $api_response = json_decode($res->getBody());
+        $api_response = $this->registerUser($params, Role::$RECOG);
 
         if ($api_response->status == "Success") {
+            $this->ci->get('flash')->addMessage('success', 'Recognizer successfully created.');
+
             return $response->withStatus(302)->withHeader('Location', '/');
         } else {
             $this->ci->get('flash')->addMessage('error', $api_response->status);
             $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+            $this->ci->get('session')->set('params', $params);
 
-            return $response->withStatus(302)->withHeader('Location', '/register');
+            return $response->withStatus(302)->withHeader('Location', '/users/register/recognizer');
         }
     }
 
@@ -124,7 +125,7 @@ class UserController
                 'nif'       => $params['nif'],
                 'email'     => $params['email'],
                 'digest'    => $params['password'],
-                'degree_id' => $params['degree_id'],
+                'degree_id' => $params['degree_id'] != null ? $params['degree_id'] : 0,
                 'role_id'   => Role::$COORD
             ]
         ]);

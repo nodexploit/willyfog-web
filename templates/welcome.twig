@@ -2,12 +2,6 @@
 
 {% block title %}Welcome{% endblock %}
 {% block content %}
-    {% if flash.getMessage('success') %}
-        <div class="alert alert-success" role="alert">
-            {{ flash.getMessage('success')[0] }}
-        </div>
-    {% endif %}
-
     <div class="row">
         <div class="col-md-4">
         <h3>Welcome to Willyfog!</h3>
