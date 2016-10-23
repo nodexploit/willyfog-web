@@ -29,6 +29,7 @@
                         <th>#</th>
                         <th>Code</th>
                         <th>Name</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,11 +37,20 @@
                         <tr>
                             <td class="col-md-1">{{ subject.id }}</td>
                             <td class="col-md-2">{{ subject.code }}</td>
-                            <td class="col-md-2">{{ subject.name }}</td>
+                            <td class="col-md-8">{{ subject.name }}</td>
+                            <td class="col-md-1" style="text-align: center;">
+                                <button class="btn btn-danger remove" rel="{{ subject.id }}">
+                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
+            </div>
+
+            <div class="row">
+                <h3>Add subject to recognizer:</h3>
             </div>
         </div>
     </div>
@@ -53,6 +63,29 @@
     <script>
         $(function () {
             $('#results').DataTable();
+
+            $(document).on('click', '.remove', function (e) {
+                if (!confirm("Are you sure?")) {
+                    return;
+                }
+
+                var subjectId = $(this).attr('rel');
+
+                $.ajax({
+                    method: 'DELETE',
+                    url: '/recognizers/{{ recognizer_id }}/subjects/' + subjectId,
+                    dataType: 'JSON'
+                }).done(function (data) {
+                    if (data.success) {
+                        alert('Subject removed successfully.');
+                        window.location.reload();
+                    } else {
+                        alert('Oops, something went wrong!');
+                    }
+                }).fail(function (err) {
+                    alert('Oops, something went wrong!');
+                });
+            });
         });
     </script>
 {% endblock %}

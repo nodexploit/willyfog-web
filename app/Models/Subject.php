@@ -12,4 +12,13 @@ class Subject
                 ->getBody()
         );
     }
+
+    public static function deleteRecognizerSubjects($recognizer_id, $subject_id)
+    {
+        return json_decode(
+            (new \App\Http\AuthorizedClient())
+                ->request('DELETE', "/api/v1/users/$recognizer_id/subjects/$subject_id")
+                ->getBody()
+        );
+    }
 }

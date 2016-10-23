@@ -33,4 +33,16 @@ class SubjectController
             'subjects' => $recognizerSubjects
         ]);
     }
+
+    public function deleteRecognizerSubject(Request $request, Response $response, array $args)
+    {
+        $recognizer_id = $args['id'];
+        $subject_id = $args['sId'];
+
+        $api_response = Subject::deleteRecognizerSubjects($recognizer_id, $subject_id);
+
+        return $response->withJson([
+            'success' => $api_response->status
+        ]);
+    }
 }

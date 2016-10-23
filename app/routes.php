@@ -36,6 +36,7 @@ $app->group('', function () use ($namespace) {
 
     $this->get('/recognizers', "$namespace\\RecognizerController:showRecognizers");
     $this->get('/recognizers/{id}', "$namespace\\RecognizerController:show");
+    $this->delete('/recognizers/{id}/subjects/{sId}', "$namespace\\SubjectController:deleteRecognizerSubject");
     // Recognizer
     $this->get('/users/register/recognizer', "$namespace\\UserController:showRegisterRecognizer");
     $this->post('/users/register/recognizer', "$namespace\\UserController:registerRecognizer");

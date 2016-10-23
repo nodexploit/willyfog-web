@@ -47,6 +47,7 @@ class RecognizerController
         $recognizer_id = $args['id'];
 
         return $this->ci->get('view')->render($response, 'recognizer/show.twig', [
+            'recognizer_id' => $recognizer_id,
             'recognizer' => \App\Models\Recognizer::find($recognizer_id),
             'subjects' => Subject::recognizerSubjects($recognizer_id)
         ]);
