@@ -24,6 +24,7 @@
                     <li><a href="/subjects">My subjects</a></li>
                 {% elseif auth.isCoordinator %}
                     <li><a href="/users/register/recognizer">Recognizer Registration</a></li>
+                    <li><a href="/recognizers">Recognizers</a></li>
                 {% elseif auth.isAdmin %}
                     <li><a href="/users/register/coordinator">Coordinator Registration</a></li>
                 {% endif %}

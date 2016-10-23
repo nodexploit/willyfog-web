@@ -1,0 +1,58 @@
+{% extends "layouts/master.twig" %}
+
+{% block title %}Recognizer{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-2">
+        <h3>{{ recognizer.name }} {{ recognizer.surname }}</h3>
+        <img src="{{ recognizer.gravatar }}?s=200">
+        <br><br>
+        <p><b>NIF</b>: {{ recognizer.nif }}</p>
+        <p><b>Email</b>: {{ recognizer.email }}</p>
+    </div>
+
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Subjects:</h3>
+
+                <br>
+
+                <table id="results" class="display">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subject in subjects %}
+                        <tr>
+                            <td class="col-md-1">{{ subject.id }}</td>
+                            <td class="col-md-2">{{ subject.code }}</td>
+                            <td class="col-md-2">{{ subject.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#results').DataTable();
+        });
+    </script>
+{% endblock %}

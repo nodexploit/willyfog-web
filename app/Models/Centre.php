@@ -12,4 +12,13 @@ class Centre
                 ->getBody()
         );
     }
+
+    public static function recognizers($centre_id)
+    {
+        return json_decode(
+            (new \App\Http\WebClient())
+                ->request('GET', "/api/v1/centres/$centre_id/recognizers")
+                ->getBody()
+        );
+    }
 }

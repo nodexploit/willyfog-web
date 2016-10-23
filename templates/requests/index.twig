@@ -14,6 +14,8 @@
         <p><b>Role: </b>{{ auth.user.role_name }}</p>
         {% if auth.isStudent %}
             <p><b>Degree: </b><br>{{ auth.user.degree_name }}</p>
+        {% endif %}
+        {% if auth.isStudent or auth.isCoordinator %}
             <p><b>Centre: </b><br>{{ auth.user.centre_name }}</p>
             <p><b>University: </b><br>{{ auth.user.university_name }}</p>
         {% endif %}

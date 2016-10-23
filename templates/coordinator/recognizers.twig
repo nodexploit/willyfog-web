@@ -1,0 +1,52 @@
+{% extends "layouts/master.twig" %}
+
+{% block title %}Recognizers{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Recognizers in centre '{{ auth.user.centre_name }}':</h3>
+
+            <br>
+
+            <table id="results" class="display">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>NIF</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for recognizer in recognizers %}
+                    <tr>
+                        <td class="col-md-1">{{ recognizer.id }}</td>
+                        <td class="col-md-1">{{ recognizer.nif }}</td>
+                        <td class="col-md-5">
+                            <a href="/recognizers/{{ recognizer.id }}">
+                                {{ recognizer.name }} {{ recognizer.surname }}
+                            </a>
+                        </td>
+                        <td class="col-md-5">{{ recognizer.email }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(function () {
+            $('#results').DataTable();
+        });
+    </script>
+{% endblock %}
