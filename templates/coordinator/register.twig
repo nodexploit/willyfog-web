@@ -7,8 +7,10 @@
 
     {% if flash.getMessage('error') %}
         <div class="alert alert-danger" role="alert">
-            {{ flash.getMessage('error')[0] }}:
-            {{ flash.getMessage('messages')[0] }}
+            {{ flash.getMessage('error')[0] }}
+            {% if flash.getMessage('messages') %}
+                : {{ flash.getMessage('messages')[0] }}
+            {% endif %}
         </div>
     {% endif %}
 
@@ -16,19 +18,23 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Coordinator name">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Coordinator name"
+                       value="{{ session.params.name }}">
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="somebody@example.com">
+                <input type="email" class="form-control" id="email" name="email" value="{{ session.params.email }}"
+                       placeholder="somebody@example.com">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="secret">
+                <input type="password" class="form-control" id="password" name="password"
+                       value="{{ session.params.password }}" placeholder="secret">
             </div>
             <div class="form-group">
                 <label for="password_confirmation">Password Confirmation</label>
-                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="secret">
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
+                       value="{{ session.params.password_confirmation }}" placeholder="secret">
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -36,31 +42,31 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="surname">Surname</label>
-                <input type="text" class="form-control" id="surname" name="surname" placeholder="Coordinator surname">
+                <input type="text" class="form-control" id="surname" name="surname" value="{{ session.params.surname }}"
+                       placeholder="Coordinator surname">
             </div>
             <div class="form-group">
                 <label for="nif">NIF</label>
-                <input type="text" class="form-control" id="nif" name="nif" placeholder="Coordinator NIF">
+                <input type="text" class="form-control" id="nif" name="nif" value="{{ session.params.nif }}"
+                       placeholder="Coordinator NIF">
             </div>
             <div class="form-group">
                 <label for="university">University</label>
-                <select class="form-control" id="university">
-                    <option selected>Coordinator university</option>
+                <select class="form-control" id="university" name="university_id">
+                    <option value="0" selected>Coordinator university</option>
                     {% for university in universities %}
-                        <option value="{{ university.id }}">{{ university.name }}</option>
+                        <option value="{{ university.id }}"
+                                {% if university.id == session.params.university_id %}
+                                    selected
+                                {% endif %}
+                        >{{ university.name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
                 <label for="centre">Centre</label>
-                <select class="form-control" id="centre">
-                    <option selected>Your centre (please select an university first)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="degree">Degree</label>
-                <select class="form-control" id="degree" name="degree_id">
-                    <option selected>Your degree (please select a centre first)</option>
+                <select class="form-control" id="centre" name="centre_id">
+                    <option value="0" selected>Coordinator centre (please select an university first)</option>
                 </select>
             </div>
         </div>
@@ -70,16 +76,14 @@
 {% block javascripts %}
     <script>
         $(function () {
+            var $university = $('#university');
+
             $('form').submit(function () {
-                if ($('#university').find(':selected').val() == "Coordinator university") {
-                    return false;
-                } else {
-                    return true;
-                }
+                return getDynamicSelectorValue($university) != 0;
             });
 
-            $('#university').change(function () {
-                var universityId = $(this).val();
+            $university.change(function () {
+                var universityId = getDynamicSelectorValue($(this));
 
                 $.ajax({
                     method: 'GET',
@@ -87,32 +91,49 @@
                     dataType: 'JSON'
                 }).done(function (data) {
                     var $centre = $('#centre');
-                    updateSelectOptions($centre, data);
+                    var oldInput = {% if session.params.centre_id %} {{ session.params.centre_id }}{% else %} 0 {% endif %};
+
+                    updateSelectOptions($centre, data, oldInput);
+
+                    $university.find("option[value='0']").remove();
+
                     $centre.trigger('change');
                 });
             });
 
-            $('#centre').change(function () {
-                var centreId = $(this).val();
-
-                $.ajax({
-                    method: 'GET',
-                    url: '/centres/' + centreId + '/degrees',
-                    dataType: 'JSON'
-                }).done(function (data) {
-                    updateSelectOptions($('#degree'), data);
-                });
-            });
+            if (getDynamicSelectorValue($university) != 0) {
+                $university.trigger('change');
+            }
         });
 
-        function updateSelectOptions($selector, data) {
+        function updateSelectOptions($selector, data, oldInput) {
+            if (data.length <= 0) {
+                return;
+            }
+
             $selector.html('');
 
             $.each(data, function (idx, val) {
+                var selected = (oldInput == val.id) ? 'selected' : '';
+
                 $selector.append(
-                        $('<option value="' + val.id + '">' + val.name + '</option>')
+                        $('<option value="' + val.id + '" ' + selected + ' >' + val.name + '</option>')
                 );
             });
+        }
+
+        function getDynamicSelectorValue(selector) {
+            var val = selector.find(':selected').val();
+
+            if (!isNumber(val)) {
+                val = 0;
+            }
+
+            return val;
+        }
+
+        function isNumber(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
         }
     </script>
 {% endblock %}

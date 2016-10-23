@@ -38,37 +38,23 @@ class UserController
         ]);
     }
 
-    /**
-     *
-     * @param Request $request
-     * @param Response $response
-     * @param $args
-     * @return static
-     */
     public function register(Request $request, Response $response, $args)
     {
         $params = $request->getParsedBody();
 
-        if ($params['password'] != $params['password_confirmation']) {
-            $this->ci->get('flash')->addMessage('error', 'Your password does not equals to your confirmation.');
-            $this->ci->get('session')->set('params', $params);
-
-            return $response->withStatus(302)->withHeader('Location', '/register');
+        if (empty($params['password']) || $params['password'] != $params['password_confirmation']) {
+            return $this->checkPasswordConfirmation($response, $params, '/register');
         }
 
         $api_response = $this->registerUser($params, Role::$STUDENT);
 
-        if ($api_response->status == "Success") {
-            $this->ci->get('flash')->addMessage('success', 'User successfully created. Please log in.');
-
-            return $response->withStatus(302)->withHeader('Location', '/');
-        } else {
-            $this->ci->get('flash')->addMessage('error', $api_response->status);
-            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
-            $this->ci->get('session')->set('params', $params);
-
-            return $response->withStatus(302)->withHeader('Location', '/register');
-        }
+        return $this->handleApiRegisterResponse(
+            $response,
+            $api_response,
+            $params,
+            'User successfully created. Please log in.',
+            '/register'
+        );
     }
 
     public function showRegisterRecognizer(Request $request, Response $response, $args)
@@ -99,47 +85,46 @@ class UserController
     {
         $params = $request->getParsedBody();
 
-        $api_response = $this->registerUser($params, Role::$COORD);
-
-        if ($api_response->status == "Success") {
-            $this->ci->get('flash')->addMessage('success', 'Coordinator successfully created.');
-
-            return $response->withStatus(302)->withHeader('Location', '/');
-        } else {
-            $this->ci->get('flash')->addMessage('error', $api_response->status);
-            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
-            $this->ci->get('session')->set('params', $params);
-
-            return $response->withStatus(302)->withHeader('Location', '/users/register/coordinator');
+        if (empty($params['password']) || $params['password'] != $params['password_confirmation']) {
+            return $this->checkPasswordConfirmation($response, $params, '/users/register/recognizer');
         }
+
+        $api_response = $this->registerUser($params, Role::$RECOG);
+
+        return $this->handleApiRegisterResponse(
+            $response,
+            $api_response,
+            $params,
+            'Recognizer successfully created.',
+            '/users/register/recognizer'
+        );
     }
 
     public function registerCoordinator(Request $request, Response $response, array $args)
     {
         $params = $request->getParsedBody();
 
-        $res = (new WebClient())->request('POST', '/api/v1/users/register', [
-            'form_params' => [
-                'name'      => $params['name'],
-                'surname'   => $params['surname'],
-                'nif'       => $params['nif'],
-                'email'     => $params['email'],
-                'digest'    => $params['password'],
-                'degree_id' => $params['degree_id'] != null ? $params['degree_id'] : 0,
-                'role_id'   => Role::$COORD
-            ]
-        ]);
-
-        $api_response = json_decode($res->getBody());
-
-        if ($api_response->status == "Success") {
-            return $response->withStatus(302)->withHeader('Location', '/');
-        } else {
-            $this->ci->get('flash')->addMessage('error', $api_response->status);
-            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
-
-            return $response->withStatus(302)->withHeader('Location', '/register');
+        if (empty($params['password']) || $params['password'] != $params['password_confirmation']) {
+            return $this->checkPasswordConfirmation($response, $params, '/users/register/coordinator');
         }
+
+        $api_response = $this->registerUser($params, Role::$COORD);
+
+        return $this->handleApiRegisterResponse(
+            $response,
+            $api_response,
+            $params,
+            'Coordinator successfully created.',
+            '/users/register/coordinator'
+        );
+    }
+
+    private function checkPasswordConfirmation(Response $response, $params, $callback_url)
+    {
+        $this->ci->get('flash')->addMessage('error', 'Your password does not equals to your confirmation.');
+        $this->ci->get('session')->set('params', $params);
+
+        return $response->withStatus(302)->withHeader('Location', $callback_url);
     }
 
     private function registerUser($params, $role_id)
@@ -154,10 +139,31 @@ class UserController
                 'email'     => $params['email'],
                 'digest'    => $params['password'],
                 'degree_id' => $params['degree_id'],
+                'centre_id' => $params['centre_id'],
                 'role_id'   => $role_id
             ]
         ]);
 
         return json_decode($res->getBody());
+    }
+
+    private function handleApiRegisterResponse(
+        Response $response,
+        $api_response,
+        $params,
+        $success_msg,
+        $callback_url
+    ) {
+        if ($api_response->status == "Success") {
+            $this->ci->get('flash')->addMessage('success', $success_msg);
+
+            return $response->withStatus(302)->withHeader('Location', '/');
+        } else {
+            $this->ci->get('flash')->addMessage('error', $api_response->status);
+            $this->ci->get('flash')->addMessage('messages', implode(', ', $api_response->messages));
+            $this->ci->get('session')->set('params', $params);
+
+            return $response->withStatus(302)->withHeader('Location', $callback_url);
+        }
     }
 }
