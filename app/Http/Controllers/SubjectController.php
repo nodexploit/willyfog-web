@@ -27,10 +27,10 @@ class SubjectController
             return $response->withStatus(302)->withHeader('Location', '/');
         }
 
-        $recognizerSubjects = Subject::recognizerSubjects($auth->userId());
+        $recognizer_subjects = Subject::recognizerSubjects($auth->userId());
 
         return $this->ci->get('view')->render($response, 'recognizer/subjects.twig', [
-            'subjects' => $recognizerSubjects
+            'subjects' => $recognizer_subjects
         ]);
     }
 

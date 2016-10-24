@@ -35,7 +35,7 @@
                     <tbody>
                     {% for subject in subjects %}
                         <tr>
-                            <td class="col-md-1">{{ subject.id }}</td>
+                            <td class="col-md-1" style="text-align: center;">{{ subject.id }}</td>
                             <td class="col-md-2">{{ subject.code }}</td>
                             <td class="col-md-8">{{ subject.name }}</td>
                             <td class="col-md-1" style="text-align: center;">
@@ -48,9 +48,52 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="row">
-                <h3>Add subject to recognizer:</h3>
+        <hr>
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    Add subject/s to recognizer:
+                </h3>
+
+                <br>
+
+                <table id="results_subjects" class="display">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Degree</th>
+                        <th>Centre</th>
+                        <th>University</th>
+                        <th>Country</th>
+                        <th>Add?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for subject in subjects_index %}
+                        <tr>
+                            <td style="text-align: center;">{{ subject.id }}</td>
+                            <td class="col-md-2">{{ subject.name }}</td>
+                            <td class="col-md-2">{{ subject.degree_name }}</td>
+                            <td class="col-md-2">{{ subject.centre_name }}</td>
+                            <td class="col-md-2">{{ subject.university_name }}</td>
+                            <td class="col-md-2">{{ subject.country_name }}</td>
+                            <td style="text-align: center;">
+                                <div class="checkbox">
+                                    <input type="checkbox" value="{{ subject.id }}">
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                <button id="add-subjects" class="btn btn-success">Add</button>
             </div>
         </div>
     </div>
@@ -63,6 +106,7 @@
     <script>
         $(function () {
             $('#results').DataTable();
+            $('#results_subjects').DataTable();
 
             $(document).on('click', '.remove', function (e) {
                 if (!confirm("Are you sure?")) {
@@ -78,6 +122,38 @@
                 }).done(function (data) {
                     if (data.success) {
                         alert('Subject removed successfully.');
+                        window.location.reload();
+                    } else {
+                        alert('Oops, something went wrong!');
+                    }
+                }).fail(function (err) {
+                    alert('Oops, something went wrong!');
+                });
+            });
+
+            $('#add-subjects').click(function (e) {
+                if (!confirm("Are you sure?")) {
+                    return;
+                }
+
+                var subjectIds = [];
+
+                $.each($('#results_subjects').find('tr'), function (idx, row) {
+                    var $checkbox = $(row).find("input[type='checkbox']");
+
+                    if ($checkbox.is(':checked')) {
+                        subjectIds.push($checkbox.val());
+                    }
+                });
+
+                $.ajax({
+                    method: 'POST',
+                    url: '/recognizers/{{ recognizer_id }}/subjects',
+                    data: { 'subject_ids': subjectIds },
+                    dataType: 'JSON'
+                }).done(function (data) {
+                    if (data.success) {
+                        alert('Subject added successfully.');
                         window.location.reload();
                     } else {
                         alert('Oops, something went wrong!');

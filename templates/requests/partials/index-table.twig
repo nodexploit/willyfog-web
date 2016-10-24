@@ -12,7 +12,7 @@
         <tbody>
         {% for request in requests %}
             <tr>
-                <td class="col-md-1">{{ request.id }}</td>
+                <td class="col-md-1" style="text-align: center;">{{ request.id }}</td>
                 <td class="col-md-2">{{ request.subject_code }}</td>
                 <td class="col-md-4">
                     <a href="/requests/{{ request.id }}">
