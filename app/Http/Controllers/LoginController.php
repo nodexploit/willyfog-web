@@ -4,7 +4,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Session;
-use App\Http\WebClient;
 use Dflydev\FigCookies\FigResponseCookies;
 use Dflydev\FigCookies\SetCookie;
 use Firebase\JWT\JWT;

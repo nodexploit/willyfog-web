@@ -3,11 +3,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Auth;
 use App\Http\AuthorizedClient;
-use App\Models\Degree;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
 use Interop\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;

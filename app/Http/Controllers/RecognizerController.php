@@ -4,14 +4,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Auth;
-use App\Http\AuthorizedClient;
 use App\Models\Recognizer;
-use App\Models\Role;
 use App\Models\Subject;
+use Interop\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Interop\Container\ContainerInterface;
-use App\Http\WebClient;
 
 class RecognizerController
 {
