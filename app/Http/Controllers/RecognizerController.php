@@ -47,11 +47,17 @@ class RecognizerController
 
         $recognizer_id = $args['id'];
 
+        $recognizer_info = \App\Models\Recognizer::find($recognizer_id);
+
+        if ("recognizer" != $recognizer_info->role_name) {
+            return $response->withStatus(302)->withHeader('Location', '/');
+        }
+
         $subjects_index = Subject::index();
 
         return $this->ci->get('view')->render($response, 'recognizer/show.twig', [
             'recognizer_id' => $recognizer_id,
-            'recognizer' => \App\Models\Recognizer::find($recognizer_id),
+            'recognizer' => $recognizer_info,
             'subjects' => Subject::recognizerSubjects($recognizer_id),
             'subjects_index' => $subjects_index
         ]);
