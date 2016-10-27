@@ -98,11 +98,15 @@
         </div>
     {% endif %}
 
-    <form method="POST" action="{{ request.id }}/comment">
-        <textarea class="form-control" rows="4" id="comment" name="comment" placeholder="Your comment ..."></textarea>
-        <br>
-        <input type="submit" value="Send">
-    </form>
+    {% if "accepted" != request.status and "rejected" != request.status %}
+
+
+        <form method="POST" action="{{ request.id }}/comment">
+            <textarea class="form-control" rows="4" id="comment" name="comment" placeholder="Your comment ..."></textarea>
+            <br>
+            <input type="submit" value="Send">
+        </form>
+    {% endif %}
 
     <br>
 
