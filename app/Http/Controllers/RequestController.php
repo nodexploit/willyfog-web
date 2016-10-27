@@ -48,6 +48,10 @@ class RequestController
 
             $eq_request = json_decode($res->getBody());
 
+            if ("Not authorized" == $eq_request->status) {
+                return $response->withStatus(302)->withHeader('Location', "/");
+            }
+
             $res = (new AuthorizedClient)->request('GET', "/api/v1/requests/$request_id/comments");
 
             $comments = json_decode($res->getBody());
