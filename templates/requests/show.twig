@@ -142,8 +142,9 @@
                     }).done(function (data) {
                         if (data.status == 'Success') {
                             alert("You successfully accepted the request.")
+                            window.location.reload();
                         } else {
-                            alert("Ups something went wrong.")
+                            alert(data.status)
                         }
                     });
                 }
@@ -159,9 +160,10 @@
                         dataType: 'JSON'
                     }).done(function (data) {
                         if (data.status == 'Success') {
-                            alert("You successfully declined the request.")
+                            alert("You successfully rejected the request.")
+                            window.location.reload();
                         } else {
-                            alert("Ups something went wrong.")
+                            alert(data.status)
                         }
                     });
                 }
